@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: build & verify
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Lint sources
+        run: npm run lint
+
+      - name: Verify committed bundle matches sources
+        run: npm run verify
+
+      - name: Rebuild and check the bundle is byte-identical
+        run: |
+          npm run build
+          git diff --exit-code -- lib/client.js

@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 安装与配置问题
+    url: https://github.com/kkppshuai-svg/dsh-corner-gauge#安装
+    about: 先看 README，大部分「面板不出现」都是 profile 没登记或没重启

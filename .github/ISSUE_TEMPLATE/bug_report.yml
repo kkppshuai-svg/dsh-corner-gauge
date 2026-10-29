@@ -1,0 +1,66 @@
+name: Bug 报告
+description: 面板不显示、数字不对、样式异常
+title: '[Bug] '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        提交前请先看一眼 [README 的「已知限制」](README.md#已知限制)。
+        余额一直显示 `--` 通常是账户模式问题（纯 API Key 模式拿不到余额）。
+
+  - type: input
+    id: dsh-version
+    attributes:
+      label: DSH 版本
+      description: 设置 → 关于，或 `dsh --version`
+      placeholder: 0.2.1-rc.2
+    validations:
+      required: true
+
+  - type: dropdown
+    id: symptom
+    attributes:
+      label: 现象
+      options:
+        - 面板完全没出现
+        - 面板出现但显示 --
+        - 数字不对 / 币种不对
+        - 样式错乱 / 位置不对
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. 安装插件并重启
+        2. 打开界面
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望行为
+    validations:
+      required: true
+
+  - type: textarea
+    id: diag
+    attributes:
+      label: 诊断信息
+      description: |
+        浏览器控制台执行下面这行，把结果贴过来：
+        ```js
+        localStorage.getItem('dsh-gauge-diag')
+        ```
+      render: json
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: 截图 / 其他
