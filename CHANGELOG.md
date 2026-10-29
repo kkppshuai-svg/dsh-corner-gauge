@@ -11,6 +11,7 @@
 - 真实录制的 M 声浪（构建时内嵌），右上角喇叭按钮开关，状态持久化
 - 新增配置 `drive.{enabled,sound,durationMs}`
 - `docs/drive-frames.png` 展示跑车经过的三帧
+- 一键部署脚本 `scripts/deploy.ps1`（构建 → 备份 → 同步到 DSH profile）与 `部署.bat` 双击入口
 
 ## [2.0.0] - 2026-10-29
 
