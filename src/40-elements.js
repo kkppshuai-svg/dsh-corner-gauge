@@ -61,65 +61,117 @@ BADGE.elements.currency = {
 /* ------------------------------------------------------------------ */
 /* 金额数字（金属质感）                                                */
 /* ------------------------------------------------------------------ */
+/*
+ * 渲染方式：SVG <text> + <linearGradient> 填充。
+ *
+ * 为什么不用 background-clip:text：
+ *   那个特性依赖「文字作为蒙版裁剪背景」的合成路径，只要任一祖先元素带
+ *   filter / transform / opacity / 混合模式，Chromium 就会把它渲染成暗色
+ *   甚至不可见。面板根部有投影 filter、.g-num 有 skew 变换，正好命中。
+ *   SVG 的渐变填充由 SVG 光栅化器直接绘制，不受祖先合成影响。
+ */
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const AMOUNT_GRAD_ID = 'gGaugeAmountGrad';
+const AMOUNT_STOPS = [
+  ['0%', '#d97a5c'],
+  ['18%', '#c05038'],
+  ['40%', '#ad3218'],
+  ['56%', '#c25a3c'],
+  ['78%', '#a83018'],
+  ['100%', '#8d1c0c'],
+];
+
 BADGE.elements.amount = {
   css(id) {
     return `
-/* 数字完全不用 filter / text-shadow：
- * Chromium 在「background-clip:text + filter」组合下会把渐变文字渲染成暗色，
- * 阴影改由 ::before 复制一层暗色文字实现（偏移 1.5px，落在背后）。 */
 #${id} .g-val {
   position: relative; display: inline-block;
-  font-family: 'GaugeRacingCondensed', ui-sans-serif, system-ui, "Segoe UI", Arial, sans-serif;
-  font-style: normal; font-weight: 700;
-  font-size: 48px; line-height: .86;
-  letter-spacing: -.2px;
+  font-style: normal;
   padding-right: 4px;
-  background: linear-gradient(180deg,
-    #d97a5c 0%, #c05038 18%, #ad3218 40%,
-    #c25a3c 56%, #a83018 78%, #8d1c0c 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: #c20800;
-  -webkit-text-fill-color: transparent;
-  text-shadow: none;
-  filter: none;
 }
-#${id} .g-val::before {
-  content: attr(data-v);
-  position: absolute; left: 0; top: 1.5px;
-  z-index: -1; pointer-events: none;
-  background: none;
-  color: rgba(0,0,0,.8);
-  -webkit-text-fill-color: rgba(0,0,0,.8);
-  text-shadow: none;
+/* 用一份隐藏的文字占位，保证布局尺寸和字宽完全正确 */
+#${id} .g-val-ghost {
+  display: block; white-space: pre; visibility: hidden;
+  font-family: 'GaugeRacingCondensed', ui-sans-serif, system-ui, "Segoe UI", Arial, sans-serif;
+  font-weight: 700; font-size: 48px; line-height: .86; letter-spacing: -.2px;
 }
-/* 兜底：万一环境不支持 background-clip:text，退回实色，绝不显示成暗块 */
-@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
-  #${id} .g-val {
-    background: none;
-    color: #d0432a;
-    -webkit-text-fill-color: #d0432a;
-  }
+/* SVG 覆盖在占位文字之上：渐变直接由 SVG 画出来 */
+#${id} .g-val-svg {
+  position: absolute; left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: visible; pointer-events: none;
 }
+#${id} .g-val-svg text {
+  font-family: 'GaugeRacingCondensed', ui-sans-serif, system-ui, "Segoe UI", Arial, sans-serif;
+  font-weight: 700; font-size: 48px; letter-spacing: -.2px;
+  text-anchor: end;
+}
+#${id} .g-val-svg .g-num-shadow { fill: rgba(0,0,0,.8); }
+#${id} .g-val-svg .g-num-main { fill: url(#${AMOUNT_GRAD_ID}); }
 #${id}.g-dim .g-val { opacity: .45; }`;
   },
 
   mount(parts) {
-    const el = document.createElement('span');
-    el.className = 'g-val';
-    el.textContent = '—';
-    BADGE.numWrap(parts).appendChild(el);
-    return el;
+    const wrap = document.createElement('span');
+    wrap.className = 'g-val';
+
+    const ghost = document.createElement('span');
+    ghost.className = 'g-val-ghost';
+    ghost.textContent = '—';
+
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('class', 'g-val-svg');
+
+    const defs = document.createElementNS(SVG_NS, 'defs');
+    const grad = document.createElementNS(SVG_NS, 'linearGradient');
+    grad.setAttribute('id', AMOUNT_GRAD_ID);
+    grad.setAttribute('x1', '0');
+    grad.setAttribute('y1', '0');
+    grad.setAttribute('x2', '0');
+    grad.setAttribute('y2', '1');
+    for (const [offset, color] of AMOUNT_STOPS) {
+      const stop = document.createElementNS(SVG_NS, 'stop');
+      stop.setAttribute('offset', offset);
+      stop.setAttribute('stop-color', color);
+      grad.appendChild(stop);
+    }
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+
+    const shadow = document.createElementNS(SVG_NS, 'text');
+    shadow.setAttribute('class', 'g-num-shadow');
+    const main = document.createElementNS(SVG_NS, 'text');
+    main.setAttribute('class', 'g-num-main');
+    svg.appendChild(shadow);
+    svg.appendChild(main);
+
+    wrap.appendChild(ghost);
+    wrap.appendChild(svg);
+    BADGE.numWrap(parts).appendChild(wrap);
+
+    return { wrap, ghost, shadow, main };
   },
 
-  update(el, view) {
+  update(ref, view) {
     const text =
       view.state === 'ready' ? BADGE.formatAmount(view.total)
         : view.state === 'loading' ? '···'
           : '--';
-    el.textContent = text;
-    /* ::before 用它复制一份做投影 */
-    el.dataset.v = text;
+
+    ref.ghost.textContent = text;
+    ref.shadow.textContent = text;
+    ref.main.textContent = text;
+
+    /* 基线位置按占位文字的实际高度推算，右对齐到容器右缘 */
+    const place = () => {
+      const h = ref.ghost.getBoundingClientRect().height || 41;
+      const y = Math.round(h * 0.78);
+      for (const t of [ref.shadow, ref.main]) t.setAttribute('x', '100%');
+      ref.main.setAttribute('y', String(y));
+      ref.shadow.setAttribute('y', String(y + 1.6));
+    };
+    place();
+    requestAnimationFrame(place);
   },
 };
 

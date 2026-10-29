@@ -2,14 +2,13 @@
 /**
  * 数字可读性防回归检查
  *
- * 背景：金额数字用 background-clip:text + 金属渐变渲染。
- * 一旦同一个元素上再出现 filter / text-shadow / -webkit-text-stroke，
- * Chromium 会把文字渲染成暗色（曾经反复踩坑）。
+ * 历史问题：金额数字曾经用 background-clip:text + 渐变渲染。
+ * 只要任一祖先元素带 filter / transform / opacity / 混合模式，
+ * Chromium 就会把这种裁剪文字渲染成暗色甚至不可见——反复出现过三次。
  *
- * 这个脚本扫描构建产物，确保：
- *   1. .g-val 规则里没有 filter / text-shadow / -webkit-text-stroke（只允许 none）
- *   2. 保留了 background-clip: text
- *   3. 有 @supports 兜底
+ * 现在的实现是 SVG <text> + <linearGradient>（由 SVG 光栅化器绘制，免疫）。
+ * 这个脚本扫描构建产物，确保没有人把它改回去，也确保祖先链上不再出现
+ * 「会让子元素进入独立合成层」的 CSS。
  */
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -17,41 +16,42 @@ import { dirname, join } from 'node:path';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const BUNDLE = join(HERE, '..', 'lib', 'client.js');
-const text = readFileSync(BUNDLE, 'utf8');
+const raw = readFileSync(BUNDLE, 'utf8');
+/* 注释里提到这些关键字不算数，先剥掉块注释 */
+const text = raw.replace(/\/\*[\s\S]*?\*\//g, '');
 
 const problems = [];
 
-/* 抽出 .g-val 的主体规则（不含 ::before 与 .g-dim） */
-const ruleMatch = text.match(/#\$\{id\} \.g-val \{([\s\S]*?)\}/);
-if (!ruleMatch) {
-  problems.push('找不到 .g-val 规则');
+/* 1. 不允许再用 background-clip: text */
+if (/background-clip:\s*text/.test(text) || /-webkit-background-clip:\s*text/.test(text)) {
+  problems.push('产物里又出现了 background-clip: text —— 祖先带 filter/transform 时会渲染成暗色，请改用 SVG 渐变');
+}
+
+/* 2. 数字必须是 SVG 渐变 */
+if (!/g-val-svg/.test(text)) problems.push('找不到 .g-val-svg，数字渲染方式被改动了');
+if (!/linearGradient/.test(text)) problems.push('缺少 SVG linearGradient');
+if (!/g-num-main/.test(text)) problems.push('缺少渐变文字节点 .g-num-main');
+
+/* 3. 面板根部（#id 规则）不允许 filter / transform */
+const rootRule = text.match(/#\$\{id\} \{\s*([\s\S]*?)\n\}/);
+if (!rootRule) {
+  problems.push('找不到面板根部样式规则');
 } else {
-  const body = ruleMatch[1];
-  /* 取属性值再判断，避免 filter: none 被误报 */
+  const body = rootRule[1];
   const valueOf = (prop) => {
     const m = body.match(new RegExp(`${prop}:\\s*([^;]+);`));
     return m ? m[1].trim().toLowerCase() : null;
   };
-
-  const fv = valueOf('filter');
-  if (fv && fv !== 'none') problems.push(`.g-val 上出现了 filter(${fv}) —— 会把渐变文字压暗`);
-
-  const ts = valueOf('text-shadow');
-  if (ts && ts !== 'none') problems.push(`.g-val 上出现了 text-shadow —— 会盖住透明文字`);
-
-  const stroke = valueOf('-webkit-text-stroke');
-  if (stroke && stroke !== 'none' && stroke !== '0') problems.push('.g-val 上出现了 text-stroke —— 会遮挡渐变');
-
-  if (!/background-clip:\s*text/.test(body)) problems.push('.g-val 缺少 background-clip: text');
+  const f = valueOf('filter');
+  if (f && f !== 'none') problems.push(`面板根部出现了 filter(${f}) —— 会让所有子元素进独立合成层`);
+  const t = valueOf('transform');
+  if (t && t !== 'none') problems.push(`面板根部出现了 transform(${t}) —— 同上`);
 }
-
-if (!/@supports not/.test(text)) problems.push('缺少 @supports 兜底');
-if (!/data-v/.test(text)) problems.push('缺少 ::before 投影用的 data-v');
 
 if (problems.length) {
   for (const p of problems) console.error('  ✗ ' + p);
   console.error('数字可读性检查失败');
   process.exit(1);
 }
-console.log('  ✓ 数字渲染路径干净（无 filter / text-shadow / stroke）');
-console.log('  ✓ 保留背景裁切 + 兜底');
+console.log('  ✓ 数字走 SVG 渐变（未使用 background-clip:text）');
+console.log('  ✓ 面板根部无 filter / transform（不破坏子元素合成）');

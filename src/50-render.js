@@ -24,12 +24,13 @@ BADGE.baseCss = function baseCss(id, cfg) {
   z-index: 2147483000; user-select: none;
   cursor: grab; touch-action: none;
   font-family: ui-sans-serif, system-ui, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-  filter: drop-shadow(0 10px 24px rgba(0,0,0,.65));
-  opacity: 0; transform: translateY(8px) scale(.97);
-  transition: opacity .5s ease, transform .5s cubic-bezier(.2,.8,.2,1);
+  opacity: 0;
+  /* 注意：这里不能加 filter / transform —— 它们会让子元素进入独立合成层，
+     历史上的「数字变暗」和「标志发灰」都是这个引起的 */
+  transition: opacity .5s ease;
 }
 #${id}.g-on { opacity: 1; transform: none; }
-#${id}.g-dragging { cursor: grabbing; filter: drop-shadow(0 16px 32px rgba(0,0,0,.8)); }
+#${id}.g-dragging { cursor: grabbing; }
 
 #${id} .g-content {
   position: absolute; inset: 0;

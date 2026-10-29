@@ -105,6 +105,16 @@
   if (new URLSearchParams(location.search).get('run')) {
     setTimeout(() => { if (window.__runDrive) window.__runDrive(); }, 500);
   }
+  /* 测试用：给面板祖先强行加上 filter/transform，验证数字是否还会变暗 */
+  if (new URLSearchParams(location.search).get('hostile')) {
+    setTimeout(() => {
+      const root = document.getElementById('dsh-corner-gauge');
+      if (!root) return;
+      root.style.filter = 'drop-shadow(0 10px 24px rgba(0,0,0,.65))';
+      root.style.transform = 'translateY(0.5px) scale(0.999)';
+    }, 600);
+  }
+
   if (freeze > 0) {
     setTimeout(() => {
       /* 按配置选车 + 定格在指定毫秒（不触发计时器） */
