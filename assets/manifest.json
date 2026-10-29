@@ -119,16 +119,16 @@
       "wheels": [
         {
           "file": "cars/mercedes-w15-wheel0.webp",
-          "x": 25.15,
-          "y": 66.07,
-          "d": 9.39,
+          "x": 23.18,
+          "y": 78.57,
+          "d": 6.97,
           "speed": 0.16
         },
         {
           "file": "cars/mercedes-w15-wheel1.webp",
-          "x": 86.36,
-          "y": 62.5,
-          "d": 9.39,
+          "x": 85.15,
+          "y": 78.57,
+          "d": 6.97,
           "speed": 0.16
         }
       ]
