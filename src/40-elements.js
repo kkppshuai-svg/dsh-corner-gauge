@@ -64,6 +64,9 @@ BADGE.elements.currency = {
 BADGE.elements.amount = {
   css(id) {
     return `
+/* 数字完全不用 filter / text-shadow：
+ * Chromium 在「background-clip:text + filter」组合下会把渐变文字渲染成暗色，
+ * 阴影改由 ::before 复制一层暗色文字实现（偏移 1.5px，落在背后）。 */
 #${id} .g-val {
   position: relative; display: inline-block;
   font-family: 'GaugeRacingCondensed', ui-sans-serif, system-ui, "Segoe UI", Arial, sans-serif;
@@ -72,13 +75,31 @@ BADGE.elements.amount = {
   letter-spacing: -.2px;
   padding-right: 4px;
   background: linear-gradient(180deg,
-    #c8664a 0%, #ab3f28 20%, #98240e 42%,
-    #b14a2e 56%, #9a2810 78%, #7b1408 100%);
+    #d97a5c 0%, #c05038 18%, #ad3218 40%,
+    #c25a3c 56%, #a83018 78%, #8d1c0c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: #c20800;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 1.5px 1.5px rgba(0,0,0,.8));
+  text-shadow: none;
+  filter: none;
+}
+#${id} .g-val::before {
+  content: attr(data-v);
+  position: absolute; left: 0; top: 1.5px;
+  z-index: -1; pointer-events: none;
+  background: none;
+  color: rgba(0,0,0,.8);
+  -webkit-text-fill-color: rgba(0,0,0,.8);
+  text-shadow: none;
+}
+/* 兜底：万一环境不支持 background-clip:text，退回实色，绝不显示成暗块 */
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  #${id} .g-val {
+    background: none;
+    color: #d0432a;
+    -webkit-text-fill-color: #d0432a;
+  }
 }
 #${id}.g-dim .g-val { opacity: .45; }`;
   },
@@ -92,9 +113,13 @@ BADGE.elements.amount = {
   },
 
   update(el, view) {
-    if (view.state === 'ready') el.textContent = BADGE.formatAmount(view.total);
-    else if (view.state === 'loading') el.textContent = '···';
-    else el.textContent = '--';
+    const text =
+      view.state === 'ready' ? BADGE.formatAmount(view.total)
+        : view.state === 'loading' ? '···'
+          : '--';
+    el.textContent = text;
+    /* ::before 用它复制一份做投影 */
+    el.dataset.v = text;
   },
 };
 
