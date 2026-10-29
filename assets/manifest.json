@@ -149,16 +149,16 @@
       "wheels": [
         {
           "file": "cars/redbull-rb20-wheel0.webp",
-          "x": 22.58,
-          "y": 65.93,
+          "x": 23.94,
+          "y": 66.67,
           "d": 9.7,
           "speed": 0.16
         },
         {
           "file": "cars/redbull-rb20-wheel1.webp",
-          "x": 91.97,
-          "y": 58.52,
-          "d": 9.7,
+          "x": 89.09,
+          "y": 65.19,
+          "d": 9.39,
           "speed": 0.16
         }
       ]
