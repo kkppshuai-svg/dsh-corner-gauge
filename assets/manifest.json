@@ -4,7 +4,6 @@
       "src": "bmw-m.svg",
       "accent": "#b00500",
       "accent2": "#c41200",
-      "logoW": 82,
       "logoH": 32
     },
     "mclaren": {
@@ -21,35 +20,30 @@
       ],
       "accent": "#ff8000",
       "accent2": "#ff9d2e",
-      "logoW": 80,
-      "logoH": 38
+      "logoH": 36
     },
     "mercedes": {
       "src": "mercedes-mark.webp",
       "accent": "#00d2be",
       "accent2": "#5ff0e3",
-      "logoW": 44,
       "logoH": 44
     },
     "redbull": {
       "src": "redbull-mark.webp",
       "accent": "#1b2a5e",
       "accent2": "#ffd400",
-      "logoW": 84,
-      "logoH": 34
+      "logoH": 32
     },
     "ferrari": {
       "src": "ferrari-mark.webp",
       "accent": "#dc0000",
       "accent2": "#ff3b3b",
-      "logoW": 38,
-      "logoH": 48
+      "logoH": 46
     },
     "sauber": {
       "src": "sauber-mark.webp",
       "accent": "#2fbd4b",
       "accent2": "#7ef08f",
-      "logoW": 42,
       "logoH": 42
     }
   },
