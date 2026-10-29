@@ -7,14 +7,6 @@
       "file": "cars/m4-silver.webp",
       "sound": "engine-m4",
       "engine": { "revScale": 1, "roar": 1 }
-    },
-    {
-      "id": "m4-grey-night",
-      "name": "M4 · 夜行隧道",
-      "kind": "plate",
-      "file": "cars/m4-grey-night.webp",
-      "sound": "engine-m4",
-      "engine": { "revScale": 1.0, "roar": 1.08 }
     }
   ],
   "sounds": [

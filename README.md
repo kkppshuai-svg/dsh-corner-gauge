@@ -116,12 +116,10 @@ window.__DSH_BADGE_CONFIG__ = {
 ```json
 {
   "cars": [
-    { "id": "m4-silver",     "name": "M4 Competition · 银", "kind": "cutout", "file": "cars/m4-silver.webp",     "sound": "engine-m4-night" },
-    { "id": "m4-grey-night", "name": "M4 · 夜行隧道",       "kind": "plate",  "file": "cars/m4-grey-night.webp", "sound": "engine-m4-night" }
+    { "id": "m4-silver", "name": "M4 Competition · 银", "kind": "cutout", "file": "cars/m4-silver.webp", "sound": "engine-m4" }
   ],
   "sounds": [
-    { "id": "engine-m4-night", "name": "M4 直六 · 夜驾实录（隧道段）", "file": "sounds/engine-m4-night.mp3" },
-    { "id": "engine-m4",       "name": "M4 直六 · 旧参考录音",         "file": "sounds/engine-m4.mp3" }
+    { "id": "engine-m4", "name": "M4 直六 · 近距实录", "file": "sounds/engine-m4.mp3" }
   ]
 }
 ```
@@ -150,7 +148,7 @@ window.__DSH_BADGE_CONFIG__ = {
 `1500 → 7300 → 2300`，配低通扫频、失谐谐波、排气噪声与收油回火。
 `engine.revScale` / `engine.roar` 可按车微调。
 
-`drive.car` 默认 `'auto'`：点一次换一辆，把车库轮着开一遍。
+`drive.car` 默认 `'auto'`：清单里有多辆车时点一次换一辆；只有一辆时始终是它。
 
 ---
 
