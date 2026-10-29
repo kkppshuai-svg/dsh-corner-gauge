@@ -37,10 +37,10 @@ SOFTWARE.
 - assets/sounds/bgm-verstappen.mp3 — original synthesis produced by this project's
   script `_tools/chant.mjs` (crowd-style "du du du du" chant, no samples used).
   Released under the same MIT licence as the rest of the project.
-- assets/mercedes-mark.svg — three-pointed star redrawn from simple geometry.
-- assets/ferrari-mark.svg, assets/redbull-mark.svg, assets/sauber-mark.svg —
-  original wordmarks/typesetting, not official artwork.
-  Team names and marks are trademarks of their respective owners; these files
-  are approximations used for a personal, non-commercial desktop widget.
+- assets/mercedes-mark.webp, assets/ferrari-mark.webp, assets/redbull-mark.webp,
+  assets/sauber-mark.webp — team emblems provided by the repository owner for this
+  personal, non-commercial desktop widget. Backgrounds removed and re-encoded by
+  `_tools/logo-key.mjs`. All team names and marks are trademarks of their
+  respective owners; this project is not affiliated with or endorsed by them.
 - assets/rajdhani-700.woff2 — Rajdhani by Indian Type Foundry,
   licensed under the SIL Open Font License 1.1.

@@ -21,31 +21,22 @@
       "accent2": "#ff9d2e"
     },
     "mercedes": {
-      "src": "mercedes-mark.svg",
-      "metal": true,
-      "metalGrad": [
-        "#ffffff 0%",
-        "#d7dee6 18%",
-        "#8d97a3 42%",
-        "#eef3f8 58%",
-        "#b6c0ca 76%",
-        "#79838f 100%"
-      ],
+      "src": "mercedes-mark.webp",
       "accent": "#00d2be",
       "accent2": "#5ff0e3"
     },
     "redbull": {
-      "src": "redbull-mark.svg",
+      "src": "redbull-mark.webp",
       "accent": "#1b2a5e",
       "accent2": "#ffd400"
     },
     "ferrari": {
-      "src": "ferrari-mark.svg",
+      "src": "ferrari-mark.webp",
       "accent": "#dc0000",
       "accent2": "#ff3b3b"
     },
     "sauber": {
-      "src": "sauber-mark.svg",
+      "src": "sauber-mark.webp",
       "accent": "#2fbd4b",
       "accent2": "#7ef08f"
     }
