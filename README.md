@@ -116,11 +116,12 @@ window.__DSH_BADGE_CONFIG__ = {
 ```json
 {
   "cars": [
-    { "id": "m4-silver",     "name": "M4 Competition · 银", "kind": "cutout", "file": "cars/m4-silver.webp",     "sound": "engine-m4" },
-    { "id": "m4-grey-night", "name": "M4 · 夜行隧道",       "kind": "plate",  "file": "cars/m4-grey-night.webp", "sound": "engine-m4" }
+    { "id": "m4-silver",     "name": "M4 Competition · 银", "kind": "cutout", "file": "cars/m4-silver.webp",     "sound": "engine-m4-night" },
+    { "id": "m4-grey-night", "name": "M4 · 夜行隧道",       "kind": "plate",  "file": "cars/m4-grey-night.webp", "sound": "engine-m4-night" }
   ],
   "sounds": [
-    { "id": "engine-m4", "name": "M4 直六 · 参考录音", "file": "sounds/engine-m4.mp3" }
+    { "id": "engine-m4-night", "name": "M4 直六 · 夜驾实录（隧道段）", "file": "sounds/engine-m4-night.mp3" },
+    { "id": "engine-m4",       "name": "M4 直六 · 旧参考录音",         "file": "sounds/engine-m4.mp3" }
   ]
 }
 ```

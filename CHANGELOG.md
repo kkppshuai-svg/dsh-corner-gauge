@@ -24,6 +24,9 @@
   新增车辆只需放图 + 清单加一条，无需改 JS。支持 `cutout`（透明抠图）与
   `plate`（柔边场景图）两种素材类型，各自匹配不同的混合方式
 - 第三辆车：银色 M4 · 夜行隧道（城市夜驾素材，车灯 + 隧道灯带柔边版）
+- 新声浪素材 `sounds/engine-m4-night.mp3`：夜驾实录隧道段（12.95s–14.55s，
+  1.6s，highpass 38Hz + 淡入淡出 + loudnorm −15 LUFS），设为两辆车默认声浪；
+  旧参考录音保留为备选
 - `drive.car`：`'auto'` 每次点击轮换车库，或填车辆 id 固定
 - 每辆车可用 `engine.revScale` / `engine.roar` 微调自己的嗓门
 
