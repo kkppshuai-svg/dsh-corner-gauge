@@ -29,7 +29,10 @@ BADGE.skins.mclaren = {
 }
 #${id} .g-stripe {
   position: absolute; left: 0; right: 0; top: 0; height: 2px;
-  background: linear-gradient(90deg, #b00500, #c41200 42%, #c03018 68%, rgba(192,48,24,0));
+  background: linear-gradient(90deg,
+    var(--g-accent, #b00500),
+    var(--g-accent-2, #c41200) 42%,
+    transparent 92%);
 }
 #${id} .g-streaks {
   position: absolute; inset: 0;
@@ -40,10 +43,25 @@ BADGE.skins.mclaren = {
 }
 #${id} .g-logo {
   position: absolute; left: 20px; top: 50%;
-  height: 34px; width: auto;
+  height: 34px; width: 74px;
   transform: translateY(-50%);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
   filter: drop-shadow(0 1px 2px rgba(0,0,0,.8));
   pointer-events: none;
+}
+/* 金属标：蒙版塑形 + 多段明暗渐变模拟镀铬（高光→本色→暗部→回光） */
+#${id} .g-logo.g-metal {
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center; mask-position: center;
+  -webkit-mask-size: contain; mask-size: contain;
+  background-image: linear-gradient(158deg,
+    #fff7e8 0%, #ffc46b 18%, #ff8a00 38%,
+    #b35400 54%, #ffc079 70%, #ff8f1f 84%, #8f3d00 100%);
+  filter:
+    drop-shadow(0 1px 1px rgba(0,0,0,.85))
+    drop-shadow(0 0 6px rgba(255,150,40,.35));
 }
 @keyframes g-streak { 0% { background-position: 0 0; } 100% { background-position: 120px 0; } }
 @media (prefers-reduced-motion: reduce) {
@@ -60,10 +78,20 @@ BADGE.skins.mclaren = {
     streaks.className = 'g-streaks';
     blade.appendChild(streaks);
 
-    const logo = document.createElement('img');
+    const logo = document.createElement('div');
     logo.className = 'g-logo';
-    logo.alt = '';
-    logo.src = 'data:image/webp;base64,__LOGO_B64__';
+
+    /* 两个子层：普通标用 <img> 原图，单色标用金属蒙版层 */
+    const logoImg = document.createElement('img');
+    logoImg.className = 'g-logo-img';
+    logoImg.alt = '';
+    logoImg.style.cssText = 'width:100%;height:100%;object-fit:contain;display:block';
+    logo.appendChild(logoImg);
+
+    const logoMetal = document.createElement('div');
+    logoMetal.className = 'g-logo-metal';
+    logo.appendChild(logoMetal);
+
     blade.appendChild(logo);
   },
 };
@@ -91,6 +119,38 @@ BADGE.skins.minimal = {
 
 /** 旧名字兼容：`bmw-m` 是同一套外壳，只是换了标志 */
 BADGE.skins['bmw-m'] = BADGE.skins.mclaren;
+
+/** 按品牌切标志与强调色：M4 → 宝马 M，迈凯伦 → speedmark */
+BADGE.setBrand = function setBrand(brand) {
+  const root = document.getElementById(BADGE.ROOT_ID);
+  if (!root) return;
+  const list = Object.keys(BADGE.BRANDS || {});
+  const name = brand && BADGE.BRANDS && BADGE.BRANDS[brand] ? brand : list[0] || 'mclaren';
+  root.dataset.brand = name;
+  const logo = root.querySelector('.g-logo');
+  const def = BADGE.BRANDS ? BADGE.BRANDS[name] : null;
+  if (!logo || !def) return;
+  const src = typeof def === 'string' ? def : def.src;
+  const metal = typeof def === 'object' && def.metal;
+
+  const img = logo.querySelector('.g-logo-img');
+  if (!img) return;
+
+  if (metal) {
+    /* 单色标：图形当蒙版，填充镀铬渐变 */
+    img.style.display = 'none';
+    logo.classList.add('g-metal');
+    logo.style.maskImage = `url("${src}")`;
+    logo.style.webkitMaskImage = `url("${src}")`;
+  } else {
+    /* 多色标：原图直出 */
+    logo.classList.remove('g-metal');
+    logo.style.maskImage = '';
+    logo.style.webkitMaskImage = '';
+    img.style.display = 'block';
+    if (img.getAttribute('src') !== src) img.src = src;
+  }
+};
 
 /** 取当前配置对应的 skin，找不到就退回 minimal。 */
 BADGE.currentSkin = function currentSkin() {

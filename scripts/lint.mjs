@@ -56,7 +56,7 @@ for (const m of all.matchAll(/BADGE\.(elements|skins)\[['"]([A-Za-z0-9_-]+)['"]\
 }
 
 /* 构建时由 assets/manifest.json 注入的成员，不在 src/ 里定义 */
-const GENERATED = new Set(['CARS', 'SOUNDS', 'findCar']);
+const GENERATED = new Set(['CARS', 'SOUNDS', 'BRANDS', 'findCar']);
 
 const used = new Set();
 for (const m of all.matchAll(/BADGE\.([A-Za-z0-9_]+)/g)) used.add(m[1]);

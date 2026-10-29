@@ -16,6 +16,7 @@ window.__freezeDrive = (offsetMs) => {
   const car = BADGE.pickCar();
   const wrap = root.querySelector('.g-car-wrap');
   if (wrap && car && BADGE.buildCarLayers) BADGE.buildCarLayers(wrap, car);
+  if (car && BADGE.setBrand) BADGE.setBrand(car.brand);
   root.style.setProperty('--drive-ms', '1500ms');
   root.classList.add('g-driving');
   if (wrap) {

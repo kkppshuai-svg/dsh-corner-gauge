@@ -281,6 +281,8 @@ BADGE.runDrive = function runDrive() {
   root.style.setProperty('--drive-ms', `${ms}ms`);
   root.classList.add('g-driving');
 
+  if (BADGE.setBrand) BADGE.setBrand(car.brand);
+
   BADGE.playEngine(car);
 
   clearTimeout(BADGE.driveTimer);

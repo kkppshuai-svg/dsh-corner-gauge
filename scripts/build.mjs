@@ -55,11 +55,19 @@ const sounds = (MANIFEST.sounds || []).map((s) => ({
   src: s.file ? dataUri(s.file) : null,
 }));
 
+/* 品牌标志：车身配色与 logo 随车辆切换 */
+const BRANDS = {
+  /* metal:true 的品牌用「蒙版 + 金属渐变」渲染，单色标更适合做镀铬 */
+  'bmw-m': { src: dataUri('bmw-m.svg'), metal: false },
+  mclaren: { src: dataUri('mclaren-mark.webp'), metal: true },
+};
+
 const cars = (MANIFEST.cars || []).map((c) => ({
   id: c.id,
   name: c.name || c.id,
   kind: ['plate', 'alpha'].includes(c.kind) ? c.kind : 'cutout',
   sound: c.sound || (sounds[0] && sounds[0].id) || null,
+  brand: c.brand || 'mclaren',
   engine: c.engine || null,
   src: dataUri(c.file),
   wheels: (c.wheels || []).map((w) => ({
@@ -76,6 +84,8 @@ if (cars.length === 0) throw new Error('assets/manifest.json 里一辆车都没�
 const assetsBlock = `
 /* ---- 素材库（由 assets/manifest.json 生成，勿手改）---- */
 BADGE.CARS = ${JSON.stringify(cars, null, 1)};
+
+BADGE.BRANDS = ${JSON.stringify(BRANDS, null, 1)};
 
 BADGE.SOUNDS = ${JSON.stringify(
   Object.fromEntries(sounds.filter((s) => s.src).map((s) => [s.id, s.src])),

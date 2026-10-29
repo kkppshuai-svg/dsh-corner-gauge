@@ -6,19 +6,39 @@
       "kind": "cutout",
       "file": "cars/m4-silver.webp",
       "sound": "engine-m4",
-      "engine": { "revScale": 1, "roar": 1 }
+      "engine": {
+        "revScale": 1,
+        "roar": 1
+      },
+      "brand": "bmw-m"
     },
     {
       "id": "mclaren-f1",
       "name": "McLaren F1 · 迈凯伦",
       "kind": "alpha",
       "file": "cars/mclaren-f1.webp",
-      "sound": "engine-m4",
-      "engine": { "revScale": 1.18, "roar": 1.2 },
+      "sound": "engine-f1",
+      "engine": {
+        "revScale": 1.18,
+        "roar": 1.2
+      },
       "wheels": [
-        { "file": "cars/mclaren-wheel-front.webp", "x": 22.29, "y": 71.47, "d": 12.24, "speed": 0.15 },
-        { "file": "cars/mclaren-wheel-rear.webp", "x": 86.29, "y": 72.39, "d": 12.24, "speed": 0.15 }
-      ]
+        {
+          "file": "cars/mclaren-wheel-front.webp",
+          "x": 22.29,
+          "y": 71.47,
+          "d": 12.24,
+          "speed": 0.15
+        },
+        {
+          "file": "cars/mclaren-wheel-rear.webp",
+          "x": 86.29,
+          "y": 72.39,
+          "d": 12.24,
+          "speed": 0.15
+        }
+      ],
+      "brand": "mclaren"
     }
   ],
   "sounds": [
@@ -26,6 +46,11 @@
       "id": "engine-m4",
       "name": "M4 直六 · 近距实录",
       "file": "sounds/engine-m4.mp3"
+    },
+    {
+      "id": "engine-f1",
+      "name": "McLaren F1 · 赛道实录（CC BY-SA 3.0 / Edvvc）",
+      "file": "sounds/engine-f1.mp3"
     }
   ]
 }

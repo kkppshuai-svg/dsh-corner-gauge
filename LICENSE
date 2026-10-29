@@ -29,5 +29,10 @@ SOFTWARE.
   "BMW" and the BMW M logo are trademarks of Bayerische Motoren Werke AG.
   Included here as a user-supplied theme asset for personal, non-commercial
   use. This project is not affiliated with or endorsed by BMW.
+- assets/sounds/engine-f1.mp3 — excerpt from "McLaren-Mercedes MP4 23 (2008).ogg"
+  by Edvvc, via Wikimedia Commons, licensed CC BY-SA 3.0
+  (https://commons.wikimedia.org/wiki/File:McLaren-Mercedes_MP4_23_(2008).ogg).
+  Modified: trimmed, mono 32kHz, loudness-normalised.
+  This derivative is distributed under the same CC BY-SA 3.0 licence.
 - assets/rajdhani-700.woff2 — Rajdhani by Indian Type Foundry,
   licensed under the SIL Open Font License 1.1.
