@@ -254,6 +254,48 @@ function fadeBottom(buf, w, h, fromRatio = 0.82) {
   }
 }
 
+/**
+ * 渐变背景抠图：用于浅灰/奶油色影棚背景（泛洪抠白无效的那些图）
+ * 逐列取顶部与底部的背景色，按色差给 alpha；阴影区给半透明，交给底部渐隐收掉。
+ */
+function keyGradient(buf, w, h, soft = 20, hard = 58) {
+  const colBg = (rowStart, rowEnd) => {
+    const out = new Array(w);
+    for (let x = 0; x < w; x++) {
+      let r = 0, g = 0, b = 0, n = 0;
+      for (let y = rowStart; y < rowEnd; y++) {
+        const o = (y * w + x) * 4;
+        r += buf[o]; g += buf[o + 1]; b += buf[o + 2]; n++;
+      }
+      out[x] = [r / n, g / n, b / n];
+    }
+    return out;
+  };
+  const top = colBg(0, Math.min(4, h));
+  const bottom = colBg(Math.max(0, h - 4), h);
+
+  let removed = 0;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const o = (y * w + x) * 4;
+      const px = buf[o], py = buf[o + 1], pz = buf[o + 2];
+      const dTop = Math.max(Math.abs(px - top[x][0]), Math.abs(py - top[x][1]), Math.abs(pz - top[x][2]));
+      const dBot = Math.max(Math.abs(px - bottom[x][0]), Math.abs(py - bottom[x][1]), Math.abs(pz - bottom[x][2]));
+      const d = Math.min(dTop, dBot);
+
+      if (d <= soft) {
+        buf[o + 3] = 0;
+        removed++;
+      } else if (d < hard) {
+        /* 阴影/半透明过渡带：最多给一半不透明度 */
+        const f = (d - soft) / (hard - soft);
+        buf[o + 3] = Math.round(buf[o + 3] * f * 0.55);
+      }
+    }
+  }
+  return removed;
+}
+
 /* ---------------- 车轮候选（--wheels 时打印） ---------------- */
 function detectWheels(buf, w, h) {
   const y0 = Math.floor(h * 0.45);
@@ -323,13 +365,58 @@ function processCar(file, opts = {}) {
   const rgba = toRGBA(file, scaleW, scaleH);
 
   const box = trimBounds(rgba, scaleW, scaleH);
-  const crop = Buffer.alloc(box.w * box.h * 4);
+  let crop = Buffer.alloc(box.w * box.h * 4);
   for (let y = 0; y < box.h; y++) {
     rgba.copy(crop, y * box.w * 4, ((box.y + y) * scaleW + box.x) * 4, ((box.y + y) * scaleW + box.x + box.w) * 4);
   }
 
-  const removed = keyWhite(crop, box.w, box.h);
+  /* 先试泛洪抠白；抠不掉多少说明是渐变背景，换 keyGradient */
+  const pristine = Buffer.from(crop);
+  let removed = keyWhite(crop, box.w, box.h);
+  if (removed < box.w * box.h * 0.12) {
+    crop.set(pristine);
+    removed = keyGradient(crop, box.w, box.h);
+    console.log(`  · ${id}：泛洪抠白只去掉少量，改用渐变背景模式`);
+  }
+
   defringe(crop, box.w, box.h);
+
+  /* 抠完再按 alpha 收紧一次：影棚阴影会在裁剪阶段把包围盒撑大 */
+  let aMinX = box.w, aMinY = box.h, aMaxX = -1, aMaxY = -1;
+  for (let y = 0; y < box.h; y++) {
+    for (let x = 0; x < box.w; x++) {
+      if (crop[(y * box.w + x) * 4 + 3] < 10) continue;
+      if (x < aMinX) aMinX = x;
+      if (x > aMaxX) aMaxX = x;
+      if (y < aMinY) aMinY = y;
+      if (y > aMaxY) aMaxY = y;
+    }
+  }
+  /* 从底部往上找到最后一个有内容的行，砍掉阴影留下的空带 */
+  while (aMaxY > aMinY) {
+    let solid = 0;
+    for (let x = 0; x < box.w; x++) {
+      if (crop[(aMaxY * box.w + x) * 4 + 3] >= 110) { solid++; }
+    }
+    if (solid > box.w * 0.05) break;
+    aMaxY--;
+  }
+
+  if (aMaxX > aMinX && aMaxY > aMinY) {
+    const tw = aMaxX - aMinX + 1;
+    const th = aMaxY - aMinY + 1;
+    if (tw < box.w || th < box.h) {
+      const tight = Buffer.alloc(tw * th * 4);
+      for (let y = 0; y < th; y++) {
+        crop.copy(tight, y * tw * 4, ((aMinY + y) * box.w + aMinX) * 4, ((aMinY + y) * box.w + aMinX + tw) * 4);
+      }
+      crop = tight;   /* 注意：crop 需为 let */
+      box.x += aMinX;
+      box.y += aMinY;
+      box.w = tw;
+      box.h = th;
+    }
+  }
   erode(crop, box.w, box.h, 2, 0.4);
   const refl = suppressReflection(crop, box.w, box.h);
   const rim = darkenRim(crop, box.w, box.h);

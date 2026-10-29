@@ -10,6 +10,26 @@
       "metal": true,
       "accent": "#ff8000",
       "accent2": "#ff9d2e"
+    },
+    "mercedes": {
+      "text": "MER",
+      "accent": "#00d2be",
+      "accent2": "#5ff0e3"
+    },
+    "redbull": {
+      "text": "RBR",
+      "accent": "#1b2a5e",
+      "accent2": "#ffd400"
+    },
+    "ferrari": {
+      "text": "FER",
+      "accent": "#dc0000",
+      "accent2": "#ff3b3b"
+    },
+    "sauber": {
+      "text": "STA",
+      "accent": "#2fbd4b",
+      "accent2": "#7ef08f"
     }
   },
   "cars": [
@@ -68,6 +88,58 @@
           "speed": 0.16
         }
       ]
+    },
+    {
+      "id": "mercedes-w15",
+      "name": "Mercedes W15 · 2024",
+      "kind": "alpha",
+      "file": "cars/mercedes-w15.webp",
+      "sound": "engine-f1-high",
+      "engine": {
+        "revScale": 1.12,
+        "roar": 1.05
+      },
+      "brand": "mercedes",
+      "css": "brightness(1.55) contrast(1.06) drop-shadow(0 2px 6px rgba(0,0,0,.85))"
+    },
+    {
+      "id": "redbull-rb20",
+      "name": "Red Bull RB20 · 2024",
+      "kind": "alpha",
+      "file": "cars/redbull-rb20.webp",
+      "sound": "engine-f1",
+      "engine": {
+        "revScale": 1.1,
+        "roar": 1.1
+      },
+      "brand": "redbull",
+      "css": "brightness(1.4) contrast(1.06) drop-shadow(0 2px 6px rgba(0,0,0,.85))"
+    },
+    {
+      "id": "ferrari-sf24",
+      "name": "Ferrari SF-24 · 2024",
+      "kind": "alpha",
+      "file": "cars/ferrari-sf24.webp",
+      "sound": "engine-f1-v12",
+      "engine": {
+        "revScale": 1.06,
+        "roar": 1.15
+      },
+      "brand": "ferrari",
+      "css": "brightness(1.35) contrast(1.06) drop-shadow(0 2px 6px rgba(0,0,0,.85))"
+    },
+    {
+      "id": "sauber-c44",
+      "name": "Sauber C44 · 2024",
+      "kind": "alpha",
+      "file": "cars/sauber-c44.webp",
+      "sound": "engine-f1",
+      "engine": {
+        "revScale": 1.04,
+        "roar": 1
+      },
+      "brand": "sauber",
+      "css": "brightness(1.3) contrast(1.06) drop-shadow(0 2px 6px rgba(0,0,0,.85))"
     }
   ],
   "sounds": [
@@ -80,6 +152,16 @@
       "id": "engine-f1",
       "name": "F1 V8 · 赛道实录",
       "file": "sounds/engine-f1.mp3"
+    },
+    {
+      "id": "engine-f1-v12",
+      "name": "F1 V12 · 加速段",
+      "file": "sounds/engine-f1-v12.mp3"
+    },
+    {
+      "id": "engine-f1-high",
+      "name": "F1 V8 · 高转段",
+      "file": "sounds/engine-f1-high.mp3"
     }
   ]
 }

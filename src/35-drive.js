@@ -462,6 +462,8 @@ BADGE.buildCarLayers = function buildCarLayers(wrap, car) {
   img.alt = '';
   img.draggable = false;
   img.src = car.src;
+  if (car.css) img.style.filter = car.css;
+  else img.style.filter = '';
   img.dataset.car = car.id;
   wrap.appendChild(img);
 
