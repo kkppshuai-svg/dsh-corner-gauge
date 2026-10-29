@@ -115,7 +115,23 @@
         "roar": 1.05
       },
       "brand": "mercedes",
-      "css": "brightness(1.55) contrast(1.06) drop-shadow(0 2px 6px rgba(0,0,0,.85))"
+      "css": "brightness(1.55) contrast(1.06) drop-shadow(0 2px 6px rgba(0,0,0,.85))",
+      "wheels": [
+        {
+          "file": "cars/mercedes-w15-wheel0.webp",
+          "x": 23.64,
+          "y": 67.86,
+          "d": 8.18,
+          "speed": 0.16
+        },
+        {
+          "file": "cars/mercedes-w15-wheel1.webp",
+          "x": 83.03,
+          "y": 65.18,
+          "d": 8.18,
+          "speed": 0.16
+        }
+      ]
     },
     {
       "id": "redbull-rb20",
@@ -129,7 +145,23 @@
       },
       "brand": "redbull",
       "css": "brightness(1.4) contrast(1.06) drop-shadow(0 2px 6px rgba(0,0,0,.85))",
-      "durationMs": 2600
+      "durationMs": 2600,
+      "wheels": [
+        {
+          "file": "cars/redbull-rb20-wheel0.webp",
+          "x": 25.3,
+          "y": 61.48,
+          "d": 10,
+          "speed": 0.16
+        },
+        {
+          "file": "cars/redbull-rb20-wheel1.webp",
+          "x": 88.18,
+          "y": 57.04,
+          "d": 10,
+          "speed": 0.16
+        }
+      ]
     },
     {
       "id": "ferrari-sf24",
@@ -142,7 +174,23 @@
         "roar": 1.15
       },
       "brand": "ferrari",
-      "css": "brightness(1.35) contrast(1.06) drop-shadow(0 2px 6px rgba(0,0,0,.85))"
+      "css": "brightness(1.35) contrast(1.06) drop-shadow(0 2px 6px rgba(0,0,0,.85))",
+      "wheels": [
+        {
+          "file": "cars/ferrari-sf24-wheel0.webp",
+          "x": 23.33,
+          "y": 65.44,
+          "d": 9.39,
+          "speed": 0.16
+        },
+        {
+          "file": "cars/ferrari-sf24-wheel1.webp",
+          "x": 88.03,
+          "y": 63.24,
+          "d": 9.39,
+          "speed": 0.16
+        }
+      ]
     },
     {
       "id": "sauber-c44",
@@ -155,7 +203,23 @@
         "roar": 1
       },
       "brand": "sauber",
-      "css": "brightness(1.3) contrast(1.06) drop-shadow(0 2px 6px rgba(0,0,0,.85))"
+      "css": "brightness(1.3) contrast(1.06) drop-shadow(0 2px 6px rgba(0,0,0,.85))",
+      "wheels": [
+        {
+          "file": "cars/sauber-c44-wheel0.webp",
+          "x": 23.33,
+          "y": 64.44,
+          "d": 9.09,
+          "speed": 0.16
+        },
+        {
+          "file": "cars/sauber-c44-wheel1.webp",
+          "x": 87.58,
+          "y": 61.48,
+          "d": 9.09,
+          "speed": 0.16
+        }
+      ]
     }
   ],
   "sounds": [
