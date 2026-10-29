@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>dsh-corner-gauge 预览</title>
+<style>
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: radial-gradient(1200px 700px at 70% 20%, #16202b 0%, #0a0e13 60%, #06080b 100%);
+    font-family: "Microsoft YaHei", system-ui, sans-serif; color: #c9d2dc;
+  }
+  .panel {
+    position: absolute; left: 26px; bottom: 26px;
+    display: flex; align-items: center; gap: 14px;
+    font-size: 12px; color: #8b96a3;
+  }
+  .panel input[type=range] { width: 220px; }
+  .panel button {
+    background: #161b22; color: #c9d2dc; border: 1px solid #2a323d;
+    border-radius: 6px; padding: 6px 12px; cursor: pointer; font-size: 12px;
+  }
+  .panel button:hover { background: #1d242d; }
+  .val { color: #e0e6ee; font-variant-numeric: tabular-nums; min-width: 78px; }
+  .hint {
+    position: absolute; left: 26px; top: 24px; max-width: 560px;
+    font-size: 12px; line-height: 1.8; color: #77828f;
+  }
+  .hint code { color: #9fb0c2; background: #121820; padding: 1px 5px; border-radius: 4px; }
+</style>
+</head>
+<body>
+  <div class="hint">
+    直接加载 <code>lib/client.js</code>，用假的 <code>ctx.remote</code> 喂数据，等于装进 App 后的真实渲染。<br />
+    面板可以拖动，松手记住位置。改边框模板或面板元素后重跑 <code>npm run build</code> 再刷新本页。
+  </div>
+
+  <div class="panel">
+    <span>余额</span>
+    <input id="amount" type="range" min="0" max="5000" step="0.01" value="148.5" />
+    <span class="val" id="amountText">¥148.50</span>
+    <button id="guest">模拟未登录</button>
+    <button id="remount">重新挂载</button>
+  </div>
+
+<script>
+  /* ---------- 假的 ctx.remote ---------- */
+  const state = { balance: 148.5, currency: 'CNY', guest: false };
+
+  window.__fakeRemote = {
+    account: {
+      async getBalance() {
+        if (state.guest) return { ok: true, value: null };
+        return {
+          ok: true,
+          value: {
+            status: 'ready',
+            value: [{ currency: state.currency, balance: state.balance.toFixed(2) }],
+            bonusWallets: [{ currency: state.currency, balance: '20.00' }],
+          },
+        };
+      },
+    },
+  };
+
+  /* ---------- 最小模块加载器 shim ---------- */
+  window.__ModuleLoader__ = {
+    load(def) {
+      window.__badgeModule = def.factory(() => { throw new Error('no require'); });
+      boot();
+    },
+  };
+
+  let ctx = null;
+  function boot() {
+    if (ctx && typeof ctx.__dispose === 'function') ctx.__dispose();
+    const disposers = [];
+    ctx = {
+      remote: window.__fakeRemote,
+      effect(fn) { disposers.push(fn); },
+      __dispose() { disposers.forEach((fn) => fn()()); },
+    };
+    window.__badgeModule.apply(ctx);
+  }
+
+  /* ---------- 控件 ---------- */
+  const amount = document.getElementById('amount');
+  const amountText = document.getElementById('amountText');
+  amount.addEventListener('input', () => {
+    state.balance = Number(amount.value);
+    amountText.textContent = `¥${state.balance.toFixed(2)}`;
+  });
+  document.getElementById('guest').addEventListener('click', () => {
+    state.guest = !state.guest;
+    document.getElementById('guest').textContent = state.guest ? '恢复登录' : '模拟未登录';
+    boot();
+  });
+  document.getElementById('remount').addEventListener('click', boot);
+</script>
+<script src="lib/client.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+{
+  "name": "dsh-corner-gauge",
+  "version": "2.0.0",
+  "description": "A skinable corner badge for DeepSeek Harness — shows account balance with a swappable frame template",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [],
+      "platform": "web"
+    }
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js",
+    "cordis.patch.yml"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/preview.mjs"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "balance",
+    "badge",
+    "hud"
+  ],
+  "license": "MIT"
+}

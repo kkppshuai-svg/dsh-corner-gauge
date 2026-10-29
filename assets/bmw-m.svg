@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="57.977619mm"
+   height="20.957119mm"
+   viewBox="0 0 57.977619 20.957119"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="BMW M logo.svg">
+  <title
+     id="title899">BMW M logo</title>
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1213">
+      <stop
+         style="stop-color:#498bc0;stop-opacity:1"
+         offset="0"
+         id="stop1209" />
+      <stop
+         style="stop-color:#255886;stop-opacity:1"
+         offset="1"
+         id="stop1211" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient1169"
+       inkscape:collect="always">
+      <stop
+         id="stop1163"
+         offset="0"
+         style="stop-color:#003d68;stop-opacity:1" />
+      <stop
+         style="stop-color:#5f8dd3;stop-opacity:1"
+         offset="0.36405027"
+         id="stop1165" />
+      <stop
+         id="stop1167"
+         offset="1"
+         style="stop-color:#002a49;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient1161"
+       inkscape:collect="always">
+      <stop
+         id="stop1155"
+         offset="0"
+         style="stop-color:#619ed5;stop-opacity:1" />
+      <stop
+         style="stop-color:#aaccff;stop-opacity:1"
+         offset="0.279814"
+         id="stop1157" />
+      <stop
+         id="stop1159"
+         offset="1"
+         style="stop-color:#3f7fbe;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1133">
+      <stop
+         style="stop-color:#db1e1c;stop-opacity:1;"
+         offset="0"
+         id="stop1129" />
+      <stop
+         id="stop1137"
+         offset="0.46274641"
+         style="stop-color:#de8787;stop-opacity:1" />
+      <stop
+         style="stop-color:#c81a17;stop-opacity:1"
+         offset="1"
+         id="stop1131" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient881">
+      <stop
+         style="stop-color:#797e81;stop-opacity:1"
+         offset="0"
+         id="stop877" />
+      <stop
+         id="stop885"
+         offset="0.53025889"
+         style="stop-color:#f0f0f0;stop-opacity:1" />
+      <stop
+         style="stop-color:#babcbd;stop-opacity:1"
+         offset="1"
+         id="stop879" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient881"
+       id="linearGradient883"
+       x1="160.41516"
+       y1="100.72788"
+       x2="157.24016"
+       y2="124.01122"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="scale(3.7795275)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1133"
+       id="linearGradient1135"
+       x1="145.03905"
+       y1="97.411301"
+       x2="145.03905"
+       y2="113.16399"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1169"
+       id="linearGradient1145"
+       x1="522.71155"
+       y1="375.08472"
+       x2="522.71155"
+       y2="432.63245"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1161"
+       id="linearGradient1153"
+       x1="489.82095"
+       y1="372.81693"
+       x2="489.82095"
+       y2="454.81442"
+       gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1198"
+       x="-0.0080616223"
+       width="1.0161232"
+       y="-0.0047780862"
+       height="1.0095562">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.041722387"
+         id="feGaussianBlur1200" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1213"
+       id="linearGradient1215"
+       x1="126.0414"
+       y1="101.48476"
+       x2="113.9418"
+       y2="122.44188"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="139.0121"
+     inkscape:cy="8.630271"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:snap-intersection-paths="false"
+     inkscape:object-nodes="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1358"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:snap-smooth-nodes="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>BMW M logo</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:date>12/04/2018</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>BMW Motorsport GmbH</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title>CMetalCore</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:source>http://www.carlogos.org/logo/BMW-M-logo-1920x1080.png</dc:source>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-113.50906,-101.48476)">
+    <g
+       id="g1243">
+      <g
+         id="g1279">
+        <path
+           style="fill:#b4b6b8;fill-opacity:1;stroke:none;stroke-width:0.04903847px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 139.57208,122.44188 -1.22196,-2.6e-4 12.2634,-20.95671 h 1.30738 z"
+           id="path871"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           style="fill:#000000;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter1198)"
+           d="m 150.54919,101.48476 -12.26342,20.95686 h 0.13642 l 12.28462,-20.95687 z"
+           id="path1188"
+           inkscape:connector-curvature="0"
+           transform="rotate(-0.01934441,144.50365,68.671394)" />
+        <path
+           style="opacity:1;fill:url(#linearGradient883);fill-opacity:1;stroke:none;stroke-width:0.18534225px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 573.16016,383.56445 -46.34766,79.20703 h 33.41211 l 15.68164,-26.29296 0.25586,26.29296 h 27.02539 l 15.69141,-26.19921 0.11132,26.19921 h 29.14844 v -79.20703 h -28.01758 l -15.92187,26.63282 v -26.63282 z"
+           transform="scale(0.26458333)"
+           id="path838"
+           inkscape:connector-curvature="0" />
+        <path
+           style="opacity:0.73000004;fill:#525557;fill-opacity:1;stroke:none;stroke-width:0.18534225px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 573.16016,383.56445 -46.34713,79.20703 h 0.70259 32.70899 l 0.24414,-0.47851 h -16.75586 l -15.85351,-0.10352 46.00585,-78.07422 h 14.89454 15.39648 l 0.043,-0.55078 h -30.00977 -0.35937 z m 46.96093,0 -0.31836,0.55078 h 13.91602 13.91602 v 39.08789 39.08985 h -14.01563 -14.5918 l -0.0371,0.47851 h 29.14844 v -79.20703 z m -43.92382,78.72852 -0.0352,0.47851 h 27.02539 l 0.24414,-0.47851 h -13.61133 z"
+           transform="scale(0.26458333)"
+           id="path874"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cccccccccccccccccccccccccccccccc" />
+        <path
+           style="opacity:1;fill:url(#linearGradient1153);fill-opacity:1;stroke:none;stroke-width:1.29332376;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+           d="m 476.37695,383.56445 -47.36718,79.20703 h 3.40429 29.48633 30.2793 30.27929 l 46.78907,-79.20703 h -30.2793 -30.2793 -29.95117 z"
+           id="path861"
+           transform="scale(0.26458333)"
+           inkscape:connector-curvature="0" />
+        <path
+           style="fill:#888c8f;fill-opacity:1;stroke:none;stroke-width:0.18534225px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 604.19922,383.56445 -2.86524,36.76563 18.78711,-36.76563 -15.92187,26.63282 z"
+           transform="scale(0.26458333)"
+           id="path842"
+           inkscape:connector-curvature="0" />
+        <path
+           style="fill:#525659;fill-opacity:1;stroke:none;stroke-width:0.04903847px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 159.10314,111.21221 0.758,-2.68075 v -7.04655 h -2e-4 z"
+           id="path844"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           style="fill:#888c8f;fill-opacity:1;stroke:none;stroke-width:0.18534225px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 578.89453,426.2207 -18.66992,36.55078 15.68164,-26.29296 0.25586,26.29296 z"
+           id="path910"
+           transform="scale(0.26458333)"
+           inkscape:connector-curvature="0" />
+        <path
+           style="fill:#525659;fill-opacity:1;stroke:none;stroke-width:0.04903847px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 148.22629,122.44188 4.14867,-6.95676 0.79102,-2.71419 z"
+           id="path846"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           style="fill:#888c8f;fill-opacity:1;stroke:none;stroke-width:0.18534225px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 621.78906,426.2207 -18.60156,36.55078 15.69141,-26.19921 0.11132,26.19921 z"
+           transform="scale(0.26458333)"
+           id="path920"
+           inkscape:connector-curvature="0" />
+        <path
+           style="fill:#525659;fill-opacity:1;stroke:none;stroke-width:0.04903847px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 159.59352,122.44188 4.15158,-6.93199 0.76978,-2.73896 -4.92152,9.67069 z"
+           id="path850"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           style="opacity:1;fill:url(#linearGradient1145);fill-opacity:1;stroke:none;stroke-width:1.29332376;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+           d="m 508.68945,383.56445 -46.78906,79.20703 h 30.2793 30.27929 l 46.78907,-79.20703 h -30.2793 z"
+           id="path859"
+           transform="scale(0.26458333)"
+           inkscape:connector-curvature="0" />
+        <path
+           style="opacity:1;fill:url(#linearGradient1135);fill-opacity:1;stroke:none;stroke-width:0.3421919;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+           d="m 142.60211,101.48491 h 8.01141 l -12.2634,20.95671 -8.12774,2.6e-4 z"
+           id="rect856"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           style="fill:url(#linearGradient1215);fill-opacity:1;stroke:none;stroke-width:0.04903847px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 126.66599,101.48491 h -0.62442 l -12.53251,20.95697 h 0.90068 z"
+           id="path863"
+           inkscape:connector-curvature="0" />
+        <path
+           style="opacity:0.15500004;fill:#000000;stroke:none;stroke-width:0.0751018px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 150.5275,101.63042 h -23.94652 l 0.085,-0.14551 h 23.9475 z"
+           id="path865"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="path1171"
+           d="m 151.56348,101.63027 h -1.03583 l 0.0862,-0.14551 h 1.03478 z"
+           style="opacity:0.44256759;fill:#000000;stroke:none;stroke-width:0.01567627px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           style="opacity:0.38500001;fill:#000000;stroke:none;stroke-width:0.01567627px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 139.38595,122.44162 h -1.03583 l 0.0862,-0.14551 h 1.03478 z"
+           id="path1175"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccc" />
+      </g>
+    </g>
+  </g>
+</svg>
