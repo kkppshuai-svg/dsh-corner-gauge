@@ -20,7 +20,18 @@ import { fileURLToPath } from 'node:url';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = join(ROOT, 'src');
 const ASSETS = join(ROOT, 'assets');
-const OUT = join(ROOT, 'lib', 'client.js');
+
+/* 命令行开关：
+ *   --local      使用 assets/sounds-local/ 里的本地覆盖声浪（版权素材，仅本机）
+ *   --out <路径> 把产物写到别处（例如直接写进 DSH 插件安装目录）
+ */
+const USE_LOCAL = process.argv.includes('--local');
+const OUT_ARG = (() => {
+  const i = process.argv.indexOf('--out');
+  return i > 0 && process.argv[i + 1] ? process.argv[i + 1] : null;
+})();
+
+const OUT = OUT_ARG || join(ROOT, 'lib', 'client.js');
 
 const PKG = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8'));
 
@@ -29,6 +40,9 @@ const MIME = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.mp3': 'audio/mpeg',
+  '.ogg': 'audio/ogg',
+  '.wav': 'audio/wav',
+  '.m4a': 'audio/mp4',
   '.woff2': 'font/woff2',
   '.svg': 'image/svg+xml',
 };
@@ -48,10 +62,9 @@ const LOGO_B64 = readFileSync(join(ASSETS, 'mclaren-mark.webp')).toString('base6
 /* ---------------- 素材库 ---------------- */
 const MANIFEST = JSON.parse(readFileSync(join(ASSETS, 'manifest.json'), 'utf8'));
 
-/* 声浪：优先用清单里的录音（构建时内嵌），没有则回退到 WebAudio 合成 */
-/* 本地覆盖：assets/sounds-local/<id>.mp3 存在时优先使用，不进仓库（.gitignore） */
 const LOCAL_DIR = join(ASSETS, 'sounds-local');
 const localSound = (id) => {
+  if (!USE_LOCAL) return null;
   for (const ext of ['.mp3', '.ogg', '.wav', '.m4a']) {
     const p = join(LOCAL_DIR, `${id}${ext}`);
     if (existsSync(p)) {
@@ -163,6 +176,7 @@ ${(body + '\n' + assetsBlock)
 
 mkdirSync(dirname(OUT), { recursive: true });
 writeFileSync(OUT, output, 'utf8');
+if (OUT_ARG) console.log('[build] 已写入 ' + OUT_ARG);
 
 const kb = (n) => `${(n / 1024).toFixed(1)} KB`;
 console.log(`已生成 ${OUT}`);
