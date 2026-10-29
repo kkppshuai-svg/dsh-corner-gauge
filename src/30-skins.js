@@ -43,7 +43,7 @@ BADGE.skins.mclaren = {
 }
 #${id} .g-logo {
   position: absolute; left: 20px; top: 50%;
-  height: 34px; width: 74px;
+  height: var(--logo-h, 34px); width: var(--logo-w, 74px);
   transform: translateY(-50%);
   background-repeat: no-repeat;
   background-position: center;
@@ -146,6 +146,12 @@ BADGE.setBrand = function setBrand(brand) {
   /* 品牌色注入面板（顶部饰条、进度线都跟着变） */
   if (def.accent) root.style.setProperty('--g-accent', def.accent);
   if (def.accent2) root.style.setProperty('--g-accent-2', def.accent2);
+
+  /* 每个品牌自己的标志尺寸：方形标要放大，横向标保持 74 宽，视觉上等重 */
+  if (def.logoW) root.style.setProperty('--logo-w', `${def.logoW}px`);
+  else root.style.removeProperty('--logo-w');
+  if (def.logoH) root.style.setProperty('--logo-h', `${def.logoH}px`);
+  else root.style.removeProperty('--logo-h');
 
   const img = logo.querySelector('.g-logo-img');
   const txt = logo.querySelector('.g-logo-text');

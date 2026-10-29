@@ -63,6 +63,8 @@ for (const [id, def] of Object.entries(MANIFEST.brands || {})) {
     metal: Boolean(def.metal),
     metalGrad: def.metalGrad || null,
     text: def.text || null,
+    logoW: def.logoW || null,
+    logoH: def.logoH || null,
     accent: def.accent || null,
     accent2: def.accent2 || null,
   };
