@@ -5,15 +5,23 @@
       "name": "M4 Competition · 银",
       "kind": "cutout",
       "file": "cars/m4-silver.webp",
+      "sound": "engine-m4",
       "engine": { "revScale": 1, "roar": 1 }
     },
     {
-      "id": "m4-gt3-blue",
-      "name": "M4 GT3 · CHINA GT 蓝",
+      "id": "m4-grey-night",
+      "name": "M4 · 夜行隧道",
       "kind": "plate",
-      "file": "cars/m4-gt3-blue.webp",
-      "engine": { "revScale": 1.06, "roar": 1.15 }
+      "file": "cars/m4-grey-night.webp",
+      "sound": "engine-m4",
+      "engine": { "revScale": 1.0, "roar": 1.08 }
     }
   ],
-  "sounds": []
+  "sounds": [
+    {
+      "id": "engine-m4",
+      "name": "M4 直六 · 参考录音",
+      "file": "sounds/engine-m4.mp3"
+    }
+  ]
 }

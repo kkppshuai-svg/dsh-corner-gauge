@@ -40,6 +40,28 @@ try {
   if (fresh === committed) ok('lib/client.js 与 src/ 一致');
   else bad('lib/client.js 已过期 —— 运行 npm run build 后重新提交');
 
+  /* Ensure the actual exported plugin declares the services used by apply. */
+  {
+    let plugin;
+    const sandbox = { window: { __ModuleLoader__: { load: entry => { plugin = entry.factory(() => { throw new Error('unexpected import'); }); } } } };
+    const { runInNewContext } = await import('node:vm');
+    try {
+      runInNewContext(fresh, sandbox, { timeout: 5000 });
+      for (const service of ['remote', 'remote.account']) {
+        if (!plugin.inject.includes(service)) throw new Error(`missing ${service}`);
+      }
+      const ctx = new Proxy({ remote: { account: {} } }, {
+        get(target, property) {
+          if (property === 'remote' && !plugin.inject.includes('remote')) throw new Error('remote accessed without inject');
+          return target[property];
+        },
+      });
+      plugin.apply(ctx);
+      ok('账户服务依赖已声明，插件入口可执行');
+    } catch (error) {
+      bad(`账户服务依赖校验失败：${error.message}`);
+    }
+  }
   /* 2. 产物语法 */
   for (const file of ['lib/client.js', 'lib/index.js']) {
     try {
@@ -62,6 +84,9 @@ try {
 
   if (committed.includes('data:image/svg+xml;base64,')) ok('标志已内嵌');
   else bad('缺少内嵌标志');
+
+  if (committed.includes('data:audio/mpeg;base64,')) ok('声浪录音已内嵌');
+  else console.log('  · 未内嵌录音声浪（将回退到合成）');
 } finally {
   rmSync(TMP, { recursive: true, force: true });
 }

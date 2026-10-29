@@ -86,6 +86,8 @@ const sandbox = {
 };
 sandbox.window = sandbox;
 sandbox.window.AudioContext = FakeAudioContext;
+/* 强制走合成路径，好断言合成器的节点创建 */
+sandbox.window.__DSH_BADGE_CONFIG__ = { drive: { engine: 'synth' } };
 
 let def = null;
 sandbox.window.__ModuleLoader__ = { load: (d) => { def = d; } };

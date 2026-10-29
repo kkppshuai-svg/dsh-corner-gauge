@@ -117,7 +117,8 @@ window.__DSH_BADGE_CONFIG__ = {
 {
   "cars": [
     { "id": "m4-silver",    "name": "M4 Competition · 银", "kind": "cutout", "file": "cars/m4-silver.webp",    "sound": "engine-m4" },
-    { "id": "m4-gt3-blue",  "name": "M4 GT3 · CHINA GT 蓝", "kind": "plate",  "file": "cars/m4-gt3-blue.webp",  "sound": "engine-m4" }
+    { "id": "m4-gt3-blue",  "name": "M4 GT3 · CHINA GT 蓝", "kind": "plate",  "file": "cars/m4-gt3-blue.webp",  "sound": "engine-m4" },
+    { "id": "m4-grey-night", "name": "M4 · 夜行隧道", "kind": "plate", "file": "cars/m4-grey-night.webp", "sound": "engine-m4" }
   ],
   "sounds": [
     { "id": "engine-m4", "name": "M4 直六 · 原地轰油", "file": "sounds/engine-m4.mp3" }

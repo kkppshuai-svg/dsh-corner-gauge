@@ -38,13 +38,28 @@ BADGE.DEFAULTS = {
     /**
      * 用素材库里的哪辆车：
      *   'auto'（默认）= 每次点击换下一辆，把整个车库轮着展示一遍
-     *   或填车辆 id（见 assets/manifest.json，如 'm4-gt3-blue'）固定一辆
+     *   或填车辆 id（见 assets/manifest.json，如 'm4-silver'）固定一辆
      */
     car: 'auto',
+    /**
+     * 声浪引擎：
+     *   'auto'（默认）= 优先播素材库里的录音，没有录音则回退到 WebAudio 合成
+     *   'sample'      = 只用录音
+     *   'synth'       = 只用实时合成
+     */
+    engine: 'auto',
   },
 };
 
-BADGE.config = Object.assign({}, BADGE.DEFAULTS, window.__DSH_BADGE_CONFIG__ || {});
+/* 用户覆盖做一层浅合并：只写 drive.fx 之类不会把其他默认值冲掉 */
+{
+  const user = window.__DSH_BADGE_CONFIG__ || {};
+  BADGE.config = Object.assign({}, BADGE.DEFAULTS, user, {
+    drive: Object.assign({}, BADGE.DEFAULTS.drive, user.drive || {}),
+    position: Object.assign({}, BADGE.DEFAULTS.position, user.position || {}),
+    size: Object.assign({}, BADGE.DEFAULTS.size, user.size || {}),
+  });
+}
 
 /** 账户接口需要客户端元数据；版本号必须与运行时一致。 */
 BADGE.DSH_VERSION = '0.2.1-rc.2';

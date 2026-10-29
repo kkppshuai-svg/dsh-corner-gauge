@@ -9,3 +9,6 @@ _crop.png
 _crop*.png
 _drive*.png
 _f*.png
+
+*.codex-backup-*
+

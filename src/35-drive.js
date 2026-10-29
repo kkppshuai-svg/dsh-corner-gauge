@@ -106,8 +106,44 @@ BADGE.makeNoise = function makeNoise(ctx, seconds) {
   return buffer;
 };
 
-/** 播一次过车声浪（合成，不依赖素材） */
+/**
+ * 播一次过车声浪。
+ *   优先用素材库里的录音（BADGE.SOUNDS[car.sound]）；
+ *   没有录音、或明显要求 synth 时，回退到实时合成。
+ */
+BADGE.audios = {};
+
+BADGE.playSample = function playSample(car) {
+  const sounds = BADGE.SOUNDS || {};
+  const id = car && car.sound;
+  const src = id ? sounds[id] : null;
+  if (!src) return false;
+  try {
+    let audio = BADGE.audios[id];
+    if (!audio) {
+      audio = new Audio(src);
+      audio.preload = 'auto';
+      audio.volume = 0.9;
+      BADGE.audios[id] = audio;
+    }
+    audio.currentTime = 0;
+    const p = audio.play();
+    if (p && typeof p.catch === 'function') p.catch(() => { /* 自动播放被拦截，忽略 */ });
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 BADGE.playEngine = function playEngine(car) {
+  if (!BADGE.soundEnabled()) return;
+  const mode = BADGE.config.drive.engine || 'auto';
+  if (mode !== 'synth' && BADGE.playSample(car)) return;
+  if (mode !== 'sample' && BADGE.playSynth) BADGE.playSynth(car);
+};
+
+/** 合成声浪（不依赖素材，作为回退） */
+BADGE.playSynth = function playSynth(car) {
   if (!BADGE.soundEnabled()) return;
   try {
     if (!BADGE.engineCtx) {

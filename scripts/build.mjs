@@ -48,16 +48,18 @@ const LOGO_B64 = readFileSync(join(ASSETS, 'bmw-m.svg')).toString('base64');
 /* ---------------- 素材库 ---------------- */
 const MANIFEST = JSON.parse(readFileSync(join(ASSETS, 'manifest.json'), 'utf8'));
 
-/* 声浪改为 WebAudio 实时合成，不再内嵌音频；sounds 仅作清单记录 */
+/* 声浪：优先用清单里的录音（构建时内嵌），没有则回退到 WebAudio 合成 */
 const sounds = (MANIFEST.sounds || []).map((s) => ({
   id: s.id,
   name: s.name || s.id,
+  src: s.file ? dataUri(s.file) : null,
 }));
 
 const cars = (MANIFEST.cars || []).map((c) => ({
   id: c.id,
   name: c.name || c.id,
   kind: c.kind === 'plate' ? 'plate' : 'cutout',
+  sound: c.sound || (sounds[0] && sounds[0].id) || null,
   engine: c.engine || null,
   src: dataUri(c.file),
 }));
@@ -68,8 +70,11 @@ const assetsBlock = `
 /* ---- 素材库（由 assets/manifest.json 生成，勿手改）---- */
 BADGE.CARS = ${JSON.stringify(cars, null, 1)};
 
-/* 声浪由 src/35-drive.js 的 WebAudio 合成器实时生成，这里留空表兼容旧配置 */
-BADGE.SOUNDS = {};
+BADGE.SOUNDS = ${JSON.stringify(
+  Object.fromEntries(sounds.filter((s) => s.src).map((s) => [s.id, s.src])),
+  null,
+  1,
+)};
 
 /** 按 id 找车；找不到返回全部清单（便于调试）。 */
 BADGE.findCar = function findCar(id) {
