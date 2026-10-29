@@ -117,7 +117,7 @@ window.__DSH_BADGE_CONFIG__ = {
 ```json
 {
   "cars": [
-    { "id": "m4-silver", "name": "M4 Competition · 银", "kind": "cutout", "file": "cars/m4-silver.webp", "sound": "engine-m4" },
+    { "id": "bmw-m4-gt3", "name": "BMW M4 GT3 · 赛车涂装", "kind": "alpha", "file": "cars/bmw-m4-gt3.webp", "sound": "engine-m4" },
     {
       "id": "mclaren-f1", "name": "McLaren F1 · 迈凯伦", "kind": "alpha",
       "file": "cars/mclaren-f1.webp", "sound": "engine-m4",

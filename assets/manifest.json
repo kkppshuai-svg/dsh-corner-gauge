@@ -1,16 +1,17 @@
 {
   "cars": [
     {
-      "id": "m4-silver",
-      "name": "M4 Competition · 银",
-      "kind": "cutout",
-      "file": "cars/m4-silver.webp",
+      "id": "bmw-m4-gt3",
+      "name": "BMW M4 GT3 · 赛车涂装",
+      "kind": "alpha",
+      "file": "cars/bmw-m4-gt3.webp",
       "sound": "engine-m4",
-      "engine": {
-        "revScale": 1,
-        "roar": 1
-      },
-      "brand": "bmw-m"
+      "engine": { "revScale": 1.06, "roar": 1.12 },
+      "brand": "bmw-m",
+      "wheels": [
+        { "file": "cars/bmw-wheel-front.webp", "x": 16.76, "y": 73.68, "d": 16.0, "speed": 0.16 },
+        { "file": "cars/bmw-wheel-rear.webp", "x": 78.48, "y": 72.37, "d": 16.0, "speed": 0.16 }
+      ]
     },
     {
       "id": "mclaren-f1",
@@ -18,27 +19,12 @@
       "kind": "alpha",
       "file": "cars/mclaren-f1.webp",
       "sound": "engine-f1",
-      "engine": {
-        "revScale": 1.18,
-        "roar": 1.2
-      },
+      "engine": { "revScale": 1.18, "roar": 1.2 },
+      "brand": "mclaren",
       "wheels": [
-        {
-          "file": "cars/mclaren-wheel-front.webp",
-          "x": 22.29,
-          "y": 71.47,
-          "d": 12.24,
-          "speed": 0.15
-        },
-        {
-          "file": "cars/mclaren-wheel-rear.webp",
-          "x": 86.29,
-          "y": 72.39,
-          "d": 12.24,
-          "speed": 0.15
-        }
-      ],
-      "brand": "mclaren"
+        { "file": "cars/mclaren-wheel-front.webp", "x": 22.29, "y": 71.47, "d": 12.24, "speed": 0.15 },
+        { "file": "cars/mclaren-wheel-rear.webp", "x": 86.29, "y": 72.39, "d": 12.24, "speed": 0.15 }
+      ]
     }
   ],
   "sounds": [

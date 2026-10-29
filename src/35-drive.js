@@ -17,6 +17,27 @@
 BADGE.drive = {};
 
 BADGE.SOUND_KEY = 'dsh-corner-gauge:sound';
+BADGE.CAR_KEY = 'dsh-corner-gauge:car';
+
+/** 用户在设置里选中的车；'auto' 表示每次点击轮换 */
+BADGE.selectedCar = function selectedCar() {
+  try {
+    const saved = localStorage.getItem(BADGE.CAR_KEY);
+    if (saved) return saved;
+  } catch { /* 忽略 */ }
+  return BADGE.config.drive.car || 'auto';
+};
+
+BADGE.setCar = function setCar(id) {
+  try {
+    localStorage.setItem(BADGE.CAR_KEY, id);
+  } catch { /* 忽略 */ }
+  BADGE.config.drive.car = id;
+  const car = id === 'auto' ? (BADGE.CARS || [])[0] : BADGE.findCar && BADGE.findCar(id);
+  if (car && BADGE.setBrand) BADGE.setBrand(car.brand);
+  BADGE.buildCarLayers && BADGE.carWrap && car && BADGE.buildCarLayers(BADGE.carWrap, car);
+  BADGE.syncGearUI && BADGE.syncGearUI(id);
+};
 
 /** 声音开关：默认取配置，用户在界面上切过则以用户为准。 */
 BADGE.soundEnabled = function soundEnabled() {
@@ -371,6 +392,34 @@ BADGE.driveCss = function driveCss(id) {
 #${id}:hover .g-sound { opacity: .85; }
 #${id} .g-sound:hover { color: #d5dde6; }
 #${id} .g-sound.g-muted { color: #5b6470; }
+#${id} .g-gear {
+  position: absolute; right: 24px; top: 5px;
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; opacity: 0; transition: opacity .18s ease;
+  color: #8b96a3; font-size: 12px; line-height: 1;
+  user-select: none;
+}
+#${id}:hover .g-gear { opacity: .85; }
+#${id} .g-gear:hover { color: #d5dde6; }
+
+/* 车辆选择菜单（挂在 root 上，不被 blade 的 clip-path 裁掉） */
+#${id} .g-menu {
+  position: absolute; right: 6px; bottom: calc(100% + 6px);
+  min-width: 150px; padding: 4px;
+  display: none; flex-direction: column; gap: 2px;
+  background: #14161c; border: 1px solid #2a2f38; border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.7);
+  font-size: 11px; color: #b9c2cd;
+  cursor: default;
+}
+#${id} .g-menu.g-menu-open { display: flex; }
+#${id} .g-menu-item {
+  padding: 5px 8px; border-radius: 5px; cursor: pointer; white-space: nowrap;
+}
+#${id} .g-menu-item:hover { background: #1d222b; color: #e6ecf3; }
+#${id} .g-menu-item.g-active { color: var(--g-accent-2, #ff9d2e); }
+
 #${id} .g-sound.g-muted::after {
   content: ""; position: absolute; width: 15px; height: 1px;
   background: currentColor; transform: rotate(-45deg);
@@ -450,6 +499,49 @@ BADGE.mountDrive = function mountDrive(parts) {
   const trail = document.createElement('div');
   trail.className = 'g-car-trail';
   blade.appendChild(trail);
+
+  /* ---- 设置：齿轮 → 选择开哪辆车 ---- */
+  const gear = document.createElement('div');
+  gear.className = 'g-gear';
+  gear.textContent = '⚙';
+  gear.setAttribute('role', 'button');
+  gear.setAttribute('aria-label', '切换车辆');
+  gear.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+    BADGE.__soundClick = true;
+    menu.classList.toggle('g-menu-open');
+  });
+  root.appendChild(gear);
+
+  const menu = document.createElement('div');
+  menu.className = 'g-menu';
+  const options = [{ id: 'auto', label: '轮换' }]
+    .concat((BADGE.CARS || []).map((c) => ({ id: c.id, label: c.name })));
+  for (const opt of options) {
+    const item = document.createElement('div');
+    item.className = 'g-menu-item';
+    item.dataset.car = opt.id;
+    item.textContent = opt.label;
+    item.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+      BADGE.__soundClick = true;
+      BADGE.setCar(opt.id);
+      menu.classList.remove('g-menu-open');
+    });
+    menu.appendChild(item);
+  }
+  root.appendChild(menu);
+
+  BADGE.syncGearUI = function syncGearUI(id) {
+    const current = id || BADGE.selectedCar();
+    menu.querySelectorAll('.g-menu-item').forEach((el) => {
+      el.classList.toggle('g-active', el.dataset.car === current);
+    });
+  };
+  BADGE.syncGearUI(BADGE.selectedCar());
+
+  /* 点面板别处关掉菜单 */
+  root.addEventListener('pointerdown', () => menu.classList.remove('g-menu-open'));
 
   const sound = document.createElement('div');
   sound.className = 'g-sound';
