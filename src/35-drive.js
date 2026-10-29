@@ -298,7 +298,8 @@ BADGE.runDrive = function runDrive() {
   const wrap = root.querySelector('.g-car-wrap');
   if (wrap && car) BADGE.buildCarLayers(wrap, car);
 
-  const ms = BADGE.config.drive.durationMs || 1500;
+  /* 单车可覆盖跑动时长（BGM 类声浪需要更长时间放完） */
+  const ms = (car && car.durationMs) || BADGE.config.drive.durationMs || 1500;
   root.style.setProperty('--drive-ms', `${ms}ms`);
   root.classList.add('g-driving');
 

@@ -197,6 +197,15 @@ node scripts/import-car.mjs \
 
 单色标会在品牌表里标 `metal: true`，用「图形当蒙版 + 金属渐变填充」渲染出镀铬质感。
 
+### 声浪与 BGM
+
+`sounds` 里可以放任意音频，车辆用 `sound` 指向它。普通引擎声浪 1.6–1.8 秒；
+如果是音乐类（BGM），给车辆加 `durationMs`，让跑车动画和音乐同长：
+
+```json
+{ "id": "redbull-rb20", "sound": "bgm-verstappen", "durationMs": 2600 }
+```
+
 ### 车轮滚动
 
 车辆条目里可以带 `wheels`：跑动时按车身百分比定位圆形车轮图层，绕自身圆心旋转。

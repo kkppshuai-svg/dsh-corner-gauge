@@ -34,5 +34,8 @@ SOFTWARE.
   (https://commons.wikimedia.org/wiki/File:McLaren-Mercedes_MP4_23_(2008).ogg).
   Modified: trimmed, mono 32kHz, loudness-normalised.
   This derivative is distributed under the same CC BY-SA 3.0 licence.
+- assets/sounds/bgm-verstappen.mp3 — excerpt from "Dutch national anthem performed
+  by the United States Navy Band" (Wikimedia Commons, public domain).
+  Modified: trimmed to the opening phrase, loudness-normalised, stereo 32kHz.
 - assets/rajdhani-700.woff2 — Rajdhani by Indian Type Foundry,
   licensed under the SIL Open Font License 1.1.

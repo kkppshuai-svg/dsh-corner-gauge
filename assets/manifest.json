@@ -104,16 +104,17 @@
     },
     {
       "id": "redbull-rb20",
-      "name": "Red Bull RB20 · 2024",
+      "name": "Red Bull RB20 · 维斯塔潘",
       "kind": "alpha",
       "file": "cars/redbull-rb20.webp",
-      "sound": "engine-f1",
+      "sound": "bgm-verstappen",
       "engine": {
         "revScale": 1.1,
         "roar": 1.1
       },
       "brand": "redbull",
-      "css": "brightness(1.4) contrast(1.06) drop-shadow(0 2px 6px rgba(0,0,0,.85))"
+      "css": "brightness(1.4) contrast(1.06) drop-shadow(0 2px 6px rgba(0,0,0,.85))",
+      "durationMs": 2600
     },
     {
       "id": "ferrari-sf24",
@@ -162,6 +163,11 @@
       "id": "engine-f1-high",
       "name": "F1 V8 · 高转段",
       "file": "sounds/engine-f1-high.mp3"
+    },
+    {
+      "id": "bgm-verstappen",
+      "name": "维斯塔潘 BGM · 荷兰国歌（公有领域）",
+      "file": "sounds/bgm-verstappen.mp3"
     }
   ]
 }

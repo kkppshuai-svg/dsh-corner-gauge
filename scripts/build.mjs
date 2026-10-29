@@ -72,6 +72,7 @@ const cars = (MANIFEST.cars || []).map((c) => ({
   name: c.name || c.id,
   kind: ['plate', 'alpha'].includes(c.kind) ? c.kind : 'cutout',
   css: c.css || null,
+  durationMs: c.durationMs || null,
   sound: c.sound || (sounds[0] && sounds[0].id) || null,
   brand: c.brand || 'mclaren',
   engine: c.engine || null,
