@@ -34,8 +34,13 @@ SOFTWARE.
   (https://commons.wikimedia.org/wiki/File:McLaren-Mercedes_MP4_23_(2008).ogg).
   Modified: trimmed, mono 32kHz, loudness-normalised.
   This derivative is distributed under the same CC BY-SA 3.0 licence.
-- assets/sounds/bgm-verstappen.mp3 — excerpt from "Dutch national anthem performed
-  by the United States Navy Band" (Wikimedia Commons, public domain).
-  Modified: trimmed to the opening phrase, loudness-normalised, stereo 32kHz.
+- assets/sounds/bgm-verstappen.mp3 — original synthesis produced by this project's
+  script `_tools/chant.mjs` (crowd-style "du du du du" chant, no samples used).
+  Released under the same MIT licence as the rest of the project.
+- assets/mercedes-mark.svg — three-pointed star redrawn from simple geometry.
+- assets/ferrari-mark.svg, assets/redbull-mark.svg, assets/sauber-mark.svg —
+  original wordmarks/typesetting, not official artwork.
+  Team names and marks are trademarks of their respective owners; these files
+  are approximations used for a personal, non-commercial desktop widget.
 - assets/rajdhani-700.woff2 — Rajdhani by Indian Type Foundry,
   licensed under the SIL Open Font License 1.1.

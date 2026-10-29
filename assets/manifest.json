@@ -8,26 +8,44 @@
     "mclaren": {
       "src": "mclaren-mark.webp",
       "metal": true,
+      "metalGrad": [
+        "#fff7e8 0%",
+        "#ffc46b 18%",
+        "#ff8a00 38%",
+        "#b35400 54%",
+        "#ffc079 70%",
+        "#ff8f1f 84%",
+        "#8f3d00 100%"
+      ],
       "accent": "#ff8000",
       "accent2": "#ff9d2e"
     },
     "mercedes": {
-      "text": "MER",
+      "src": "mercedes-mark.svg",
+      "metal": true,
+      "metalGrad": [
+        "#ffffff 0%",
+        "#d7dee6 18%",
+        "#8d97a3 42%",
+        "#eef3f8 58%",
+        "#b6c0ca 76%",
+        "#79838f 100%"
+      ],
       "accent": "#00d2be",
       "accent2": "#5ff0e3"
     },
     "redbull": {
-      "text": "RBR",
+      "src": "redbull-mark.svg",
       "accent": "#1b2a5e",
       "accent2": "#ffd400"
     },
     "ferrari": {
-      "text": "FER",
+      "src": "ferrari-mark.svg",
       "accent": "#dc0000",
       "accent2": "#ff3b3b"
     },
     "sauber": {
-      "text": "STA",
+      "src": "sauber-mark.svg",
       "accent": "#2fbd4b",
       "accent2": "#7ef08f"
     }

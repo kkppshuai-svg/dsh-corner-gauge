@@ -154,6 +154,7 @@ BADGE.setBrand = function setBrand(brand) {
   logo.classList.remove('g-metal');
   logo.style.maskImage = '';
   logo.style.webkitMaskImage = '';
+  logo.style.backgroundImage = '';
   img.style.display = 'none';
   txt.style.display = 'none';
 
@@ -166,10 +167,13 @@ BADGE.setBrand = function setBrand(brand) {
   }
 
   if (def.metal) {
-    /* 单色标：图形当蒙版，填充镀铬渐变 */
+    /* 单色标：图形当蒙版，填充品牌的金属渐变（迈凯伦橙 / 奔驰银） */
     logo.classList.add('g-metal');
     logo.style.maskImage = `url("${def.src}")`;
     logo.style.webkitMaskImage = `url("${def.src}")`;
+    logo.style.backgroundImage = Array.isArray(def.metalGrad)
+      ? `linear-gradient(158deg, ${def.metalGrad.join(', ')})`
+      : '';
     return;
   }
 

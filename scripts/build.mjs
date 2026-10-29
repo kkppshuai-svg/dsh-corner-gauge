@@ -61,6 +61,7 @@ for (const [id, def] of Object.entries(MANIFEST.brands || {})) {
   BRANDS[id] = {
     src: def.src ? dataUri(def.src) : null,
     metal: Boolean(def.metal),
+    metalGrad: def.metalGrad || null,
     text: def.text || null,
     accent: def.accent || null,
     accent2: def.accent2 || null,
