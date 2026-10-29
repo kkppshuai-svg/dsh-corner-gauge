@@ -66,28 +66,165 @@ BADGE.pickCar = function pickCar() {
 };
 
 /* ------------------------------------------------------------------ */
-/* 声浪                                                                */
+/* 声浪：WebAudio 合成直列六缸                                         */
 /* ------------------------------------------------------------------ */
-/** 懒加载音频对象：按声浪 id 各缓存一个（首次点击时才创建）。 */
-BADGE.audios = {};
+/*
+ * 为什么合成而不是放录音：素材库里那段是从参考视频抽的，里面主要是
+ * 音乐节拍 + 风噪，没有干净的引擎声。合成版可控（转速、缸数、过车
+ * 多普勒），体积也更小——不用再内嵌 15KB 音频。
+ *
+ * 物理依据：四冲程直列六缸，每转点火 3 次 → 点火频率 f = rpm / 20。
+ *   怠速 1500rpm → 75Hz
+ *   红线 7300rpm → 365Hz
+ * 做法：点火频率的谐波堆叠（×0.5 / ×1 / ×2 / ×3 / ×4）+ 低通随转速
+ * 扫动 + 噪声层做排气砂砾 + 收油回火脉冲 + 左右声像模拟掠过。
+ */
+BADGE.engineCtx = null;
+
+/** 转速曲线：起步、拉高到红线、回落、再补一脚 */
+BADGE.RPM_CURVE = [1500, 3300, 6500, 7300, 6100, 3500, 5300, 2300];
+
+/** 把若干插值点铺成 n 个样本（供 setValueCurveAtTime 用） */
+BADGE.sampleCurve = function sampleCurve(values, n) {
+  const out = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    const pos = (i / (n - 1)) * (values.length - 1);
+    const lo = Math.floor(pos);
+    const hi = Math.min(values.length - 1, lo + 1);
+    const f = pos - lo;
+    out[i] = values[lo] * (1 - f) + values[hi] * f;
+  }
+  return out;
+};
+
+/** 白噪声 buffer：排气/进气的砂砾层和回火都用它 */
+BADGE.makeNoise = function makeNoise(ctx, seconds) {
+  const len = Math.max(1, Math.floor(ctx.sampleRate * seconds));
+  const buffer = ctx.createBuffer(1, len, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+  return buffer;
+};
+
+/** 播一次过车声浪（合成，不依赖素材） */
 BADGE.playEngine = function playEngine(car) {
   if (!BADGE.soundEnabled()) return;
-  const sounds = BADGE.SOUNDS || {};
-  const id = (car && car.sound) || Object.keys(sounds)[0];
-  const src = id ? sounds[id] : null;
-  if (!src) return;
   try {
-    let audio = BADGE.audios[id];
-    if (!audio) {
-      audio = new Audio(src);
-      audio.preload = 'auto';
-      audio.volume = 0.85;
-      BADGE.audios[id] = audio;
+    if (!BADGE.engineCtx) {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      BADGE.engineCtx = new Ctx();
     }
-    audio.currentTime = 0;
-    const p = audio.play();
-    if (p && typeof p.catch === 'function') p.catch(() => { /* 自动播放被拦截，忽略 */ });
-  } catch { /* 忽略 */ }
+    const ctx = BADGE.engineCtx;
+    if (ctx.state === 'suspended') ctx.resume();
+
+    /* 不同车可以有不同的嗓门：直六 vs 更凶的调校 */
+    const tune = (car && car.engine) || {};
+    const revScale = tune.revScale || 1;
+    const roar = tune.roar === undefined ? 1 : tune.roar;
+
+    const dur = 1.7;
+    const t0 = ctx.currentTime + 0.02;
+    const N = 96;
+
+    const rpm = BADGE.RPM_CURVE.map((r) => r * revScale);
+    const fire = BADGE.sampleCurve(rpm.map((r) => r / 20), N);
+    const cutoff = BADGE.sampleCurve(rpm.map((r) => 420 + (r / 7300) * 2400), N);
+
+    /* 总输出：左右掠过 + 音量包络 */
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0.0001, t0);
+    master.gain.exponentialRampToValueAtTime(0.5 * roar, t0 + 0.10);
+    master.gain.setValueAtTime(0.5 * roar, t0 + dur * 0.72);
+    master.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+
+    let out = master;
+    if (ctx.createStereoPanner) {
+      const panner = ctx.createStereoPanner();
+      panner.pan.setValueAtTime(0.85, t0);
+      panner.pan.linearRampToValueAtTime(-0.85, t0 + dur);
+      master.connect(panner);
+      panner.connect(ctx.destination);
+      out = panner;
+    } else {
+      master.connect(ctx.destination);
+    }
+
+    /* 低通：转速越高越开，带共振做出"吼"的质感 */
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.Q.value = 7;
+    lp.frequency.setValueCurveAtTime(cutoff, t0, dur);
+    lp.connect(master);
+
+    /* 谐波堆叠：六缸的厚度靠这几层叠出来 */
+    const voices = [
+      { mult: 0.5, gain: 0.32, type: 'sawtooth' },
+      { mult: 1, gain: 0.50, type: 'sawtooth' },
+      { mult: 2, gain: 0.26, type: 'sawtooth' },
+      { mult: 3, gain: 0.13, type: 'square' },
+      { mult: 4, gain: 0.06, type: 'sawtooth' },
+    ];
+
+    for (const v of voices) {
+      const osc = ctx.createOscillator();
+      osc.type = v.type;
+      osc.frequency.setValueCurveAtTime(
+        BADGE.sampleCurve(rpm.map((r) => (r / 20) * v.mult), N),
+        t0,
+        dur,
+      );
+      const g = ctx.createGain();
+      g.gain.value = v.gain;
+      osc.connect(g);
+      g.connect(lp);
+      osc.start(t0);
+      osc.stop(t0 + dur + 0.05);
+    }
+
+    /* 噪声层：排气砂砾 + 进气嘶声 */
+    const noise = ctx.createBufferSource();
+    noise.buffer = BADGE.makeNoise(ctx, dur + 0.2);
+    noise.loop = true;
+    const noiseFilter = ctx.createBiquadFilter();
+    noiseFilter.type = 'bandpass';
+    noiseFilter.frequency.setValueCurveAtTime(
+      BADGE.sampleCurve(rpm.map((r) => 600 + (r / 7300) * 2000), N),
+      t0,
+      dur,
+    );
+    noiseFilter.Q.value = 1.1;
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.0001, t0);
+    noiseGain.gain.exponentialRampToValueAtTime(0.18 * roar, t0 + 0.12);
+    noiseGain.gain.setValueAtTime(0.18 * roar, t0 + dur * 0.7);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    noise.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(master);
+    noise.start(t0);
+    noise.stop(t0 + dur + 0.05);
+
+    /* 收油回火：几个极短的噪声脉冲，补上"啪"的颗粒感 */
+    for (const at of [0.60, 0.67, 0.74]) {
+      const pop = ctx.createBufferSource();
+      pop.buffer = BADGE.makeNoise(ctx, 0.06);
+      const popFilter = ctx.createBiquadFilter();
+      popFilter.type = 'bandpass';
+      popFilter.frequency.value = 900 + Math.random() * 300;
+      popFilter.Q.value = 1.6;
+      const popGain = ctx.createGain();
+      popGain.gain.setValueAtTime(0.30 * roar, t0 + dur * at);
+      popGain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur * at + 0.09);
+      pop.connect(popFilter);
+      popFilter.connect(popGain);
+      popGain.connect(master);
+      pop.start(t0 + dur * at);
+      pop.stop(t0 + dur * at + 0.1);
+    }
+  } catch {
+    /* 音频不可用时静默，不影响动画 */
+  }
 };
 
 /* ------------------------------------------------------------------ */

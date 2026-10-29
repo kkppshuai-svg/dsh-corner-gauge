@@ -8,7 +8,7 @@
 ### Added
 
 - 点击彩蛋：M 跑车从右向左穿过面板，期间只显示跑车与速度线
-- 真实录制的 M 声浪（构建时内嵌），右上角喇叭按钮开关，状态持久化
+- 声浪改为 **WebAudio 实时合成**（直列六缸谐波堆叠 + 转速扫升 + 过车声像），\n  右上角喇叭按钮开关，状态持久化
 - 新增配置 `drive.{enabled,sound,durationMs}`
 - `docs/drive-frames.png` 展示跑车经过的三帧
 - 一键部署脚本 `scripts/deploy.ps1`（构建 → 备份 → 同步到 DSH profile）与 `部署.bat` 双击入口
@@ -17,7 +17,7 @@
   `plate`（柔边场景图）两种素材类型，各自匹配不同的混合方式
 - 第二辆车：蓝色 BMW M4 GT3（CHINA GT / FIST_Auto 素材，柔边场景版）
 - `drive.car`：`'auto'` 每次点击轮换车库，或填车辆 id 固定
-- 每辆车可在清单里指定自己的声浪（`sound` 字段）
+- 每辆车可用 `engine.revScale` / `engine.roar` 微调自己的嗓门
 
 ### Changed
 

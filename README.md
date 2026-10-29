@@ -35,7 +35,7 @@
 - **可拖动**：位置写入 localStorage，窗口缩放自动钳制回视口
 - **不崩界面**：取数失败按指数退避重试；未登录 / 不可用时显示 `--`，不会静默消失
 - **彩蛋**：单击面板，一辆 M 跑车从右向左开过一次（期间只显示跑车），
-  配真实录制的 M 声浪，右上角喇叭按钮可开关声音
+  配 WebAudio 实时合成的直列六缸声浪（带转速扫升与过车声像），右上角喇叭按钮可开关声音
 
 ---
 
@@ -111,7 +111,7 @@ window.__DSH_BADGE_CONFIG__ = {
 
 ## 素材库
 
-所有车辆与声浪都在 `assets/manifest.json` 里声明，**构建时整体内嵌进产物**（仍是零外部请求）。
+所有车辆都在 `assets/manifest.json` 里声明，**构建时整体内嵌进产物**（仍是零外部请求）。
 
 ```json
 {
@@ -133,7 +133,7 @@ window.__DSH_BADGE_CONFIG__ = {
 | `plate` | 带柔化透明边的场景照片 | 正常混合，边缘自己淡出 |
 
 **加一辆车**：把图片丢进 `assets/cars/`，在清单里加一条，`npm run build` 即可 —— 不用改 JS。
-**换声浪**：把 mp3 丢进 `assets/sounds/`，清单加一条，再在车辆条目里写 `"sound": "<声浪 id>"`。
+**调声浪**：声浪不是录音而是实时合成，参数在 `src/35-drive.js` 的 `BADGE.RPM_CURVE`（转速曲线）\n与 `playEngine` 里的谐波表。车辆可在清单里用 `engine.revScale` / `engine.roar` 微调嗓门。
 
 `drive.car` 默认 `'auto'`：点一次换一辆，把车库轮着开一遍。
 
@@ -143,7 +143,7 @@ window.__DSH_BADGE_CONFIG__ = {
 
 **单击面板**（不拖动），一辆 M 跑车从右向左开过一次：
 
-- 车辆与声浪来自上面的素材库，默认按 `auto` 轮换
+- 车辆来自上面的素材库，默认按 `auto` 轮换
 - 跑动期间面板元素、边框标志、进度线、斜向流动纹全部隐藏，只留跑车本体
 - **右上角喇叭按钮**开关声音，状态写进 `localStorage`，下次启动保持
 - 拖动与单击互斥：指针位移 < 6px 且短于 400ms 判定为单击；点喇叭不会误触发跑车
@@ -271,9 +271,9 @@ src/
   50-render.js     装配：样式汇总、建 DOM、绘制、重试
   60-client.js     插件入口 apply()
 assets/
-  manifest.json    素材库清单（车辆 / 声浪）
+  manifest.json    素材库清单（车辆）
   cars/            车辆图片（cutout 或 plate）
-  sounds/          声浪 mp3
+  （声浪为 WebAudio 实时合成，无音频文件）
   bmw-m.svg        标志（构建时 base64 内嵌）
   rajdhani-700.woff2  字体（构建时 base64 内嵌）
 scripts/           build / verify / lint

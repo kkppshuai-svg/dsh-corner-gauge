@@ -33,7 +33,8 @@
     "build": "node scripts/build.mjs",
     "verify": "node scripts/verify.mjs",
     "lint": "node scripts/lint.mjs",
-    "test": "npm run lint && npm run verify"
+    "smoke": "node scripts/smoke-engine.mjs",
+    "test": "npm run lint && npm run verify && npm run smoke"
   },
   "engines": {
     "node": ">=18"

@@ -55,9 +55,12 @@ for (const m of all.matchAll(/BADGE\.(elements|skins)\[['"]([A-Za-z0-9_-]+)['"]\
   defined.add(`${m[1]}:${m[2]}`);
 }
 
+/* 构建时由 assets/manifest.json 注入的成员，不在 src/ 里定义 */
+const GENERATED = new Set(['CARS', 'SOUNDS', 'findCar']);
+
 const used = new Set();
 for (const m of all.matchAll(/BADGE\.([A-Za-z0-9_]+)/g)) used.add(m[1]);
-const missing = [...used].filter((name) => !defined.has(name));
+const missing = [...used].filter((name) => !defined.has(name) && !GENERATED.has(name));
 if (missing.length === 0) ok('BADGE 命名空间引用完整');
 else bad(`引用了未定义成员：${missing.join(', ')}`);
 
