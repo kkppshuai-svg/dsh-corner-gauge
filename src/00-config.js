@@ -35,6 +35,12 @@ BADGE.DEFAULTS = {
     durationMs: 1500,
     /** 跑车期间的附加特效（速度线、拖尾）。默认关：只留跑车更干净。 */
     fx: false,
+    /**
+     * 用素材库里的哪辆车：
+     *   'auto'（默认）= 每次点击换下一辆，把整个车库轮着展示一遍
+     *   或填车辆 id（见 assets/manifest.json，如 'm4-gt3-blue'）固定一辆
+     */
+    car: 'auto',
   },
 };
 

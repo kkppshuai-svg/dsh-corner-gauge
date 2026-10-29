@@ -12,6 +12,12 @@
 - 新增配置 `drive.{enabled,sound,durationMs}`
 - `docs/drive-frames.png` 展示跑车经过的三帧
 - 一键部署脚本 `scripts/deploy.ps1`（构建 → 备份 → 同步到 DSH profile）与 `部署.bat` 双击入口
+- **素材库**：`assets/manifest.json` 声明车辆与声浪，构建时整体内嵌；
+  新增车辆只需放图 + 清单加一条，无需改 JS。支持 `cutout`（透明抠图）与
+  `plate`（柔边场景图）两种素材类型，各自匹配不同的混合方式
+- 第二辆车：蓝色 BMW M4 GT3（CHINA GT / FIST_Auto 素材，柔边场景版）
+- `drive.car`：`'auto'` 每次点击轮换车库，或填车辆 id 固定
+- 每辆车可在清单里指定自己的声浪（`sound` 字段）
 
 ### Changed
 

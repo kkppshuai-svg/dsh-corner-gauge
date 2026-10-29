@@ -104,25 +104,55 @@ window.__DSH_BADGE_CONFIG__ = {
 | `drive.enabled` | `boolean` | `true` | 是否启用点击跑车彩蛋 |
 | `drive.sound` | `boolean` | `true` | 声浪默认开关（用户切过以用户为准） |
 | `drive.durationMs` | `number` | `1500` | 跑车穿过面板的时长 |
+| `drive.fx` | `boolean` | `false` | 是否叠加速度线与拖尾特效 |
+| `drive.car` | `string` | `'auto'` | `'auto'` 每次点击换下一辆；也可填固定车辆 id |
+
+---
+
+## 素材库
+
+所有车辆与声浪都在 `assets/manifest.json` 里声明，**构建时整体内嵌进产物**（仍是零外部请求）。
+
+```json
+{
+  "cars": [
+    { "id": "m4-silver",    "name": "M4 Competition · 银", "kind": "cutout", "file": "cars/m4-silver.webp",    "sound": "engine-m4" },
+    { "id": "m4-gt3-blue",  "name": "M4 GT3 · CHINA GT 蓝", "kind": "plate",  "file": "cars/m4-gt3-blue.webp",  "sound": "engine-m4" }
+  ],
+  "sounds": [
+    { "id": "engine-m4", "name": "M4 直六 · 原地轰油", "file": "sounds/engine-m4.mp3" }
+  ]
+}
+```
+
+`kind` 决定在面板上怎么融进深色刀锋：
+
+| kind | 含义 | 渲染方式 |
+|---|---|---|
+| `cutout` | 透明底（或黑底可被过滤）的抠图 | `mix-blend-mode: screen`，黑底自动消失 |
+| `plate` | 带柔化透明边的场景照片 | 正常混合，边缘自己淡出 |
+
+**加一辆车**：把图片丢进 `assets/cars/`，在清单里加一条，`npm run build` 即可 —— 不用改 JS。
+**换声浪**：把 mp3 丢进 `assets/sounds/`，清单加一条，再在车辆条目里写 `"sound": "<声浪 id>"`。
+
+`drive.car` 默认 `'auto'`：点一次换一辆，把车库轮着开一遍。
 
 ---
 
 ## 彩蛋：跑车
 
-**单击面板**（不拖动），一辆侧视 M 跑车从右向左开过一次：
+**单击面板**（不拖动），一辆 M 跑车从右向左开过一次：
 
-- 跑动期间面板元素、边框标志、进度线全部隐藏，只留跑车和速度线
-- 声浪取自真实录制素材，构建时内嵌为 base64，零外部请求
+- 车辆与声浪来自上面的素材库，默认按 `auto` 轮换
+- 跑动期间面板元素、边框标志、进度线、斜向流动纹全部隐藏，只留跑车本体
 - **右上角喇叭按钮**开关声音，状态写进 `localStorage`，下次启动保持
-- 拖动与单击互斥：指针位移 < 6px 且短于 400ms 判定为单击
+- 拖动与单击互斥：指针位移 < 6px 且短于 400ms 判定为单击；点喇叭不会误触发跑车
 
 ```js
 window.__DSH_BADGE_CONFIG__ = {
-  drive: { enabled: true, sound: true, durationMs: 1500 },
+  drive: { enabled: true, sound: true, durationMs: 1500, fx: false, car: 'auto' },
 };
 ```
-
-跑车形象与声浪来自参考视频抽帧 / 音轨，见 `assets/car.webp`、`assets/engine.mp3`。
 
 ![跑车三帧](docs/drive-frames.png)
 
@@ -240,7 +270,12 @@ src/
   40-elements.js   面板元素注册表（内容）
   50-render.js     装配：样式汇总、建 DOM、绘制、重试
   60-client.js     插件入口 apply()
-assets/            字体与标志（构建时 base64 内嵌）
+assets/
+  manifest.json    素材库清单（车辆 / 声浪）
+  cars/            车辆图片（cutout 或 plate）
+  sounds/          声浪 mp3
+  bmw-m.svg        标志（构建时 base64 内嵌）
+  rajdhani-700.woff2  字体（构建时 base64 内嵌）
 scripts/           build / verify / lint
 lib/               构建产物：index.js（宿主半边）+ client.js（浏览器半边）
 ```

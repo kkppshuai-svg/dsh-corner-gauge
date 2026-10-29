@@ -1,6 +1,6 @@
 {
   "name": "dsh-corner-gauge",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A skinnable corner balance badge for DeepSeek Harness — swap the frame template, compose the panel from elements",
   "type": "module",
   "main": "lib/index.js",
