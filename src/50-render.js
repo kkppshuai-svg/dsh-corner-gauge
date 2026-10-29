@@ -58,6 +58,9 @@ BADGE.collectCss = function collectCss() {
     const el = BADGE.elements[name];
     if (el && typeof el.css === 'function') parts.push(el.css(id));
   }
+  if (BADGE.config.drive && BADGE.config.drive.enabled !== false && BADGE.driveCss) {
+    parts.push(BADGE.driveCss(id));
+  }
   return parts.join('\n');
 };
 
@@ -96,6 +99,8 @@ BADGE.build = function build() {
     const el = def.mount(parts);
     if (el) BADGE.mounted.push({ name, el, def });
   }
+
+  if (BADGE.mountDrive) BADGE.mountDrive(parts);
 
   (document.body || document.documentElement).appendChild(root);
   BADGE.restorePos(root);

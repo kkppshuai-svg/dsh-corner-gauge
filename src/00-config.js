@@ -28,6 +28,12 @@ BADGE.DEFAULTS = {
   size: { width: 322, height: 70 },
   currency: 'auto',
   pollMs: 60000,
+  /** 彩蛋：点击面板让 M 跑车开过一次（声浪可用右上角喇叭开关） */
+  drive: {
+    enabled: true,
+    sound: true,
+    durationMs: 1500,
+  },
 };
 
 BADGE.config = Object.assign({}, BADGE.DEFAULTS, window.__DSH_BADGE_CONFIG__ || {});

@@ -34,6 +34,8 @@
 - **零外部请求**：字体与标志全部 base64 内嵌，离线可用（CI 会校验）
 - **可拖动**：位置写入 localStorage，窗口缩放自动钳制回视口
 - **不崩界面**：取数失败按指数退避重试；未登录 / 不可用时显示 `--`，不会静默消失
+- **彩蛋**：单击面板，一辆 M 跑车从右向左开过一次（期间只显示跑车），
+  配真实录制的 M 声浪，右上角喇叭按钮可开关声音
 
 ---
 
@@ -99,6 +101,30 @@ window.__DSH_BADGE_CONFIG__ = {
 | `size` | `{width,height}` | `{322,70}` | 面板尺寸（px） |
 | `currency` | `string` | `'auto'` | 币种，`auto` 跟随账户 |
 | `pollMs` | `number` | `60000` | 轮询间隔（毫秒） |
+| `drive.enabled` | `boolean` | `true` | 是否启用点击跑车彩蛋 |
+| `drive.sound` | `boolean` | `true` | 声浪默认开关（用户切过以用户为准） |
+| `drive.durationMs` | `number` | `1500` | 跑车穿过面板的时长 |
+
+---
+
+## 彩蛋：跑车
+
+**单击面板**（不拖动），一辆侧视 M 跑车从右向左开过一次：
+
+- 跑动期间面板元素、边框标志、进度线全部隐藏，只留跑车和速度线
+- 声浪取自真实录制素材，构建时内嵌为 base64，零外部请求
+- **右上角喇叭按钮**开关声音，状态写进 `localStorage`，下次启动保持
+- 拖动与单击互斥：指针位移 < 6px 且短于 400ms 判定为单击
+
+```js
+window.__DSH_BADGE_CONFIG__ = {
+  drive: { enabled: true, sound: true, durationMs: 1500 },
+};
+```
+
+跑车形象与声浪来自参考视频抽帧 / 音轨，见 `assets/car.webp`、`assets/engine.mp3`。
+
+![跑车三帧](docs/drive-frames.png)
 
 ---
 

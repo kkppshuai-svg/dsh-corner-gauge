@@ -39,6 +39,7 @@
     <input id="amount" type="range" min="0" max="5000" step="0.01" value="148.5" />
     <span class="val" id="amountText">¥148.50</span>
     <button id="guest">模拟未登录</button>
+    <button id="run">跑一次 ▶</button>
     <button id="remount">重新挂载</button>
   </div>
 
@@ -94,7 +95,24 @@
     document.getElementById('guest').textContent = state.guest ? '恢复登录' : '模拟未登录';
     boot();
   });
-  document.getElementById('remount').addEventListener('click', boot);
+  document.getElementById('run').addEventListener('click', () => {
+    boot();
+    window.__runDrive();
+  });
+
+  /* 截图用：?freeze=700 把跑车定格在动画的指定毫秒处 */
+  const freeze = Number(new URLSearchParams(location.search).get('freeze') || 0);
+  if (freeze > 0) {
+    setTimeout(() => {
+      const root = document.getElementById('dsh-corner-gauge');
+      const car = root && root.querySelector('.g-car');
+      if (!root || !car) return;
+      root.style.setProperty('--drive-ms', '1500ms');
+      root.classList.add('g-driving');
+      car.style.animationPlayState = 'paused';
+      car.style.animationDelay = `-${freeze}ms`;
+    }, 400);
+  }
 </script>
 <script src="lib/client.js"></script>
 </body>

@@ -5,6 +5,13 @@
 
 ## [Unreleased]
 
+### Added
+
+- 点击彩蛋：M 跑车从右向左穿过面板，期间只显示跑车与速度线
+- 真实录制的 M 声浪（构建时内嵌），右上角喇叭按钮开关，状态持久化
+- 新增配置 `drive.{enabled,sound,durationMs}`
+- `docs/drive-frames.png` 展示跑车经过的三帧
+
 ## [2.0.0] - 2026-10-29
 
 ### Added

@@ -6,6 +6,9 @@
  */
 BADGE.inject = [];
 
+/* 供预览页/调试调用：跑一次跑车 */
+window.__runDrive = () => BADGE.runDrive();
+
 /** 等 <body> 就绪再挂载（客户端插件可能在解析 head 时就被激活）。 */
 BADGE.whenBody = function whenBody(fn) {
   if (typeof document === 'undefined') return;
