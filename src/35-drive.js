@@ -158,17 +158,19 @@ BADGE.playEngine = function playEngine(car) {
     lp.connect(master);
 
     /* 谐波堆叠：六缸的厚度靠这几层叠出来 */
+    /* detune 是几音分的轻微失谐：让各层互相拍频，听感像多缸而不是合成器 */
     const voices = [
-      { mult: 0.5, gain: 0.32, type: 'sawtooth' },
-      { mult: 1, gain: 0.50, type: 'sawtooth' },
-      { mult: 2, gain: 0.26, type: 'sawtooth' },
-      { mult: 3, gain: 0.13, type: 'square' },
-      { mult: 4, gain: 0.06, type: 'sawtooth' },
+      { mult: 0.5, gain: 0.32, type: 'sawtooth', detune: -9 },
+      { mult: 1, gain: 0.50, type: 'sawtooth', detune: 0 },
+      { mult: 2, gain: 0.26, type: 'sawtooth', detune: 7 },
+      { mult: 3, gain: 0.13, type: 'square', detune: -5 },
+      { mult: 4, gain: 0.06, type: 'sawtooth', detune: 11 },
     ];
 
     for (const v of voices) {
       const osc = ctx.createOscillator();
       osc.type = v.type;
+      if (osc.detune) osc.detune.value = v.detune || 0;
       osc.frequency.setValueCurveAtTime(
         BADGE.sampleCurve(rpm.map((r) => (r / 20) * v.mult), N),
         t0,
