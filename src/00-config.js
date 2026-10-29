@@ -33,6 +33,8 @@ BADGE.DEFAULTS = {
     enabled: true,
     sound: true,
     durationMs: 1500,
+    /** 跑车期间的附加特效（速度线、拖尾）。默认关：只留跑车更干净。 */
+    fx: false,
   },
 };
 

@@ -81,7 +81,10 @@ BADGE.driveCss = function driveCss(id) {
 #${id}.g-driving .g-content { opacity: 0; }
 #${id}.g-driving .g-logo { opacity: 0; }
 #${id}.g-driving .g-bar { opacity: 0; }
-#${id}.g-driving .g-blade::before {
+/* 跑车期间把常驻的斜向流动纹也压掉，避免"车上又叠了一层流动边条" */
+#${id}.g-driving .g-streaks { opacity: 0; }
+/* 速度线、拖尾属于可选特效（config.drive.fx），默认关闭 */
+#${id}.g-driving.g-fx .g-blade::before {
   content: ""; position: absolute; inset: 0;
   background: repeating-linear-gradient(90deg,
     rgba(255,255,255,.10) 0 2px, transparent 2px 26px);
@@ -94,9 +97,9 @@ BADGE.driveCss = function driveCss(id) {
   background: linear-gradient(90deg, transparent, rgba(200,200,210,.55));
   border-radius: 1px;
 }
-#${id}.g-driving .g-car-trail { animation: g-trail var(--drive-ms, 1500ms) linear forwards; }
+#${id}.g-driving.g-fx .g-car-trail { animation: g-trail var(--drive-ms, 1500ms) linear forwards; }
 
-#${id} .g-content, #${id} .g-logo, #${id} .g-bar { transition: opacity 160ms ease; }
+#${id} .g-content, #${id} .g-logo, #${id} .g-bar, #${id} .g-streaks { transition: opacity 160ms ease; }
 
 #${id} .g-sound {
   position: absolute; right: 6px; top: 5px;
@@ -138,6 +141,9 @@ BADGE.driveCss = function driveCss(id) {
 BADGE.mountDrive = function mountDrive(parts) {
   const { root, blade } = parts;
   if (!BADGE.config.drive || BADGE.config.drive.enabled === false) return;
+
+  /* 可选特效（速度线 + 拖尾）：默认关闭，只留跑车本体 */
+  if (BADGE.config.drive.fx) root.classList.add('g-fx');
 
   const car = document.createElement('img');
   car.className = 'g-car';
