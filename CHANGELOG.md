@@ -5,6 +5,14 @@
 
 ## [Unreleased]
 
+### Changed
+
+- 声浪改为 **录音优先、合成兜底**：内嵌参考录音，新增 `drive.engine`
+  （`auto` / `sample` / `synth`）切换来源
+- 移除第二辆车「M4 GT3 · CHINA GT 蓝」（观感不佳）
+- 配置覆盖改为浅合并，只写 `drive.fx` 不会再冲掉其他默认值
+- `verify` 增加「声浪录音已内嵌」检查
+
 ### Added
 
 - 点击彩蛋：M 跑车从右向左穿过面板，期间只显示跑车与速度线
@@ -15,7 +23,6 @@
 - **素材库**：`assets/manifest.json` 声明车辆与声浪，构建时整体内嵌；
   新增车辆只需放图 + 清单加一条，无需改 JS。支持 `cutout`（透明抠图）与
   `plate`（柔边场景图）两种素材类型，各自匹配不同的混合方式
-- 第二辆车：蓝色 BMW M4 GT3（CHINA GT / FIST_Auto 素材，柔边场景版）
 - 第三辆车：银色 M4 · 夜行隧道（城市夜驾素材，车灯 + 隧道灯带柔边版）
 - `drive.car`：`'auto'` 每次点击轮换车库，或填车辆 id 固定
 - 每辆车可用 `engine.revScale` / `engine.roar` 微调自己的嗓门

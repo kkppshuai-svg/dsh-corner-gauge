@@ -35,7 +35,7 @@
 - **可拖动**：位置写入 localStorage，窗口缩放自动钳制回视口
 - **不崩界面**：取数失败按指数退避重试；未登录 / 不可用时显示 `--`，不会静默消失
 - **彩蛋**：单击面板，一辆 M 跑车从右向左开过一次（期间只显示跑车），
-  配 WebAudio 实时合成的直列六缸声浪（带转速扫升与过车声像），右上角喇叭按钮可开关声音
+  配 M4 直六声浪（参考录音内嵌，另有 WebAudio 合成器兜底），右上角喇叭按钮可开关声音
 
 ---
 
@@ -116,12 +116,11 @@ window.__DSH_BADGE_CONFIG__ = {
 ```json
 {
   "cars": [
-    { "id": "m4-silver",    "name": "M4 Competition · 银", "kind": "cutout", "file": "cars/m4-silver.webp",    "sound": "engine-m4" },
-    { "id": "m4-gt3-blue",  "name": "M4 GT3 · CHINA GT 蓝", "kind": "plate",  "file": "cars/m4-gt3-blue.webp",  "sound": "engine-m4" },
-    { "id": "m4-grey-night", "name": "M4 · 夜行隧道", "kind": "plate", "file": "cars/m4-grey-night.webp", "sound": "engine-m4" }
+    { "id": "m4-silver",     "name": "M4 Competition · 银", "kind": "cutout", "file": "cars/m4-silver.webp",     "sound": "engine-m4" },
+    { "id": "m4-grey-night", "name": "M4 · 夜行隧道",       "kind": "plate",  "file": "cars/m4-grey-night.webp", "sound": "engine-m4" }
   ],
   "sounds": [
-    { "id": "engine-m4", "name": "M4 直六 · 原地轰油", "file": "sounds/engine-m4.mp3" }
+    { "id": "engine-m4", "name": "M4 直六 · 参考录音", "file": "sounds/engine-m4.mp3" }
   ]
 }
 ```
@@ -134,7 +133,21 @@ window.__DSH_BADGE_CONFIG__ = {
 | `plate` | 带柔化透明边的场景照片 | 正常混合，边缘自己淡出 |
 
 **加一辆车**：把图片丢进 `assets/cars/`，在清单里加一条，`npm run build` 即可 —— 不用改 JS。
-**调声浪**：声浪不是录音而是实时合成，参数在 `src/35-drive.js` 的 `BADGE.RPM_CURVE`（转速曲线）\n与 `playEngine` 里的谐波表。车辆可在清单里用 `engine.revScale` / `engine.roar` 微调嗓门。
+**换声浪**：把 mp3 丢进 `assets/sounds/`，清单 `sounds` 加一条，车辆的 `sound` 指向它即可。
+
+### 声浪：录音优先，合成兜底
+
+`drive.engine` 控制声浪来源：
+
+| 值 | 行为 |
+|---|---|
+| `'auto'`（默认） | 优先播放清单里的录音，没有录音时回退到 WebAudio 合成 |
+| `'sample'` | 只用录音 |
+| `'synth'` | 只用实时合成（直列六缸谐波堆叠，见 `src/35-drive.js`） |
+
+合成器按四冲程直列六缸建模（点火频率 `f = rpm/20`），转速曲线
+`1500 → 7300 → 2300`，配低通扫频、失谐谐波、排气噪声与收油回火。
+`engine.revScale` / `engine.roar` 可按车微调。
 
 `drive.car` 默认 `'auto'`：点一次换一辆，把车库轮着开一遍。
 
@@ -274,7 +287,7 @@ src/
 assets/
   manifest.json    素材库清单（车辆）
   cars/            车辆图片（cutout 或 plate）
-  （声浪为 WebAudio 实时合成，无音频文件）
+  sounds/          声浪录音（构建时内嵌，可留空走合成）
   bmw-m.svg        标志（构建时 base64 内嵌）
   rajdhani-700.woff2  字体（构建时 base64 内嵌）
 scripts/           build / verify / lint
