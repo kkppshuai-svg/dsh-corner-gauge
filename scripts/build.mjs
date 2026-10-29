@@ -56,11 +56,16 @@ const sounds = (MANIFEST.sounds || []).map((s) => ({
 }));
 
 /* 品牌标志：车身配色与 logo 随车辆切换 */
-const BRANDS = {
-  /* metal:true 的品牌用「蒙版 + 金属渐变」渲染，单色标更适合做镀铬 */
-  'bmw-m': { src: dataUri('bmw-m.svg'), metal: false },
-  mclaren: { src: dataUri('mclaren-mark.webp'), metal: true },
-};
+const BRANDS = {};
+for (const [id, def] of Object.entries(MANIFEST.brands || {})) {
+  BRANDS[id] = {
+    src: def.src ? dataUri(def.src) : null,
+    metal: Boolean(def.metal),
+    text: def.text || null,
+    accent: def.accent || null,
+    accent2: def.accent2 || null,
+  };
+}
 
 const cars = (MANIFEST.cars || []).map((c) => ({
   id: c.id,

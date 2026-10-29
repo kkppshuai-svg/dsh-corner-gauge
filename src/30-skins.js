@@ -52,6 +52,14 @@ BADGE.skins.mclaren = {
   pointer-events: none;
 }
 /* 金属标：蒙版塑形 + 多段明暗渐变模拟镀铬（高光→本色→暗部→回光） */
+#${id} .g-logo-text {
+  display: none;
+  width: 100%; height: 100%;
+  align-items: center; justify-content: center;
+  font: 700 17px/1 Rajdhani, system-ui, sans-serif;
+  letter-spacing: .10em; padding-left: .10em;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.85));
+}
 #${id} .g-logo.g-metal {
   -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
   -webkit-mask-position: center; mask-position: center;
@@ -92,6 +100,10 @@ BADGE.skins.mclaren = {
     logoMetal.className = 'g-logo-metal';
     logo.appendChild(logoMetal);
 
+    const logoText = document.createElement('span');
+    logoText.className = 'g-logo-text';
+    logo.appendChild(logoText);
+
     blade.appendChild(logo);
   },
 };
@@ -130,26 +142,40 @@ BADGE.setBrand = function setBrand(brand) {
   const logo = root.querySelector('.g-logo');
   const def = BADGE.BRANDS ? BADGE.BRANDS[name] : null;
   if (!logo || !def) return;
-  const src = typeof def === 'string' ? def : def.src;
-  const metal = typeof def === 'object' && def.metal;
+
+  /* 品牌色注入面板（顶部饰条、进度线都跟着变） */
+  if (def.accent) root.style.setProperty('--g-accent', def.accent);
+  if (def.accent2) root.style.setProperty('--g-accent-2', def.accent2);
 
   const img = logo.querySelector('.g-logo-img');
-  if (!img) return;
+  const txt = logo.querySelector('.g-logo-text');
+  if (!img || !txt) return;
 
-  if (metal) {
-    /* 单色标：图形当蒙版，填充镀铬渐变 */
-    img.style.display = 'none';
-    logo.classList.add('g-metal');
-    logo.style.maskImage = `url("${src}")`;
-    logo.style.webkitMaskImage = `url("${src}")`;
-  } else {
-    /* 多色标：原图直出 */
-    logo.classList.remove('g-metal');
-    logo.style.maskImage = '';
-    logo.style.webkitMaskImage = '';
-    img.style.display = 'block';
-    if (img.getAttribute('src') !== src) img.src = src;
+  logo.classList.remove('g-metal');
+  logo.style.maskImage = '';
+  logo.style.webkitMaskImage = '';
+  img.style.display = 'none';
+  txt.style.display = 'none';
+
+  if (def.text) {
+    /* 文字标：车队缩写 */
+    txt.textContent = def.text;
+    txt.style.display = 'flex';
+    txt.style.color = def.accent2 || def.accent || '#fff';
+    return;
   }
+
+  if (def.metal) {
+    /* 单色标：图形当蒙版，填充镀铬渐变 */
+    logo.classList.add('g-metal');
+    logo.style.maskImage = `url("${def.src}")`;
+    logo.style.webkitMaskImage = `url("${def.src}")`;
+    return;
+  }
+
+  /* 多色标：原图直出 */
+  img.style.display = 'block';
+  if (img.getAttribute('src') !== def.src) img.src = def.src;
 };
 
 /** 取当前配置对应的 skin，找不到就退回 minimal。 */
