@@ -21,3 +21,5 @@ _z*.png
 .import-tmp/
 assets/incoming/*.png
 assets/incoming/*.jpg
+
+_brands*.png
