@@ -119,16 +119,16 @@
       "wheels": [
         {
           "file": "cars/mercedes-w15-wheel0.webp",
-          "x": 23.64,
-          "y": 67.86,
-          "d": 8.18,
+          "x": 25.15,
+          "y": 66.07,
+          "d": 9.39,
           "speed": 0.16
         },
         {
           "file": "cars/mercedes-w15-wheel1.webp",
-          "x": 83.03,
-          "y": 65.18,
-          "d": 8.18,
+          "x": 86.36,
+          "y": 62.5,
+          "d": 9.39,
           "speed": 0.16
         }
       ]
@@ -149,16 +149,16 @@
       "wheels": [
         {
           "file": "cars/redbull-rb20-wheel0.webp",
-          "x": 25.3,
-          "y": 61.48,
-          "d": 10,
+          "x": 22.58,
+          "y": 65.93,
+          "d": 9.7,
           "speed": 0.16
         },
         {
           "file": "cars/redbull-rb20-wheel1.webp",
-          "x": 88.18,
-          "y": 57.04,
-          "d": 10,
+          "x": 91.97,
+          "y": 58.52,
+          "d": 9.7,
           "speed": 0.16
         }
       ]
