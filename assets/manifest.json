@@ -5,7 +5,7 @@
       "name": "M4 Competition · 银",
       "kind": "cutout",
       "file": "cars/m4-silver.webp",
-      "sound": "engine-m4-night",
+      "sound": "engine-m4",
       "engine": { "revScale": 1, "roar": 1 }
     },
     {
@@ -13,19 +13,14 @@
       "name": "M4 · 夜行隧道",
       "kind": "plate",
       "file": "cars/m4-grey-night.webp",
-      "sound": "engine-m4-night",
+      "sound": "engine-m4",
       "engine": { "revScale": 1.0, "roar": 1.08 }
     }
   ],
   "sounds": [
     {
-      "id": "engine-m4-night",
-      "name": "M4 直六 · 夜驾实录（隧道段）",
-      "file": "sounds/engine-m4-night.mp3"
-    },
-    {
       "id": "engine-m4",
-      "name": "M4 直六 · 旧参考录音",
+      "name": "M4 直六 · 近距实录",
       "file": "sounds/engine-m4.mp3"
     }
   ]
