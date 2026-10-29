@@ -29,7 +29,7 @@
 
 ## 特性
 
-- **边框可换**：内置 `bmw-m`（斜切 + M 标志）与 `minimal`（极简圆角）
+- **边框可换**：内置 `mclaren`（斜切 + 迈凯伦 speedmark）与 `minimal`（极简圆角）
 - **元素可插**：货币符号、金额、进度条各自独立，按 `config.elements` 顺序装配
 - **零外部请求**：字体与标志全部 base64 内嵌，离线可用（CI 会校验）
 - **可拖动**：位置写入 localStorage，窗口缩放自动钳制回视口
@@ -84,7 +84,7 @@ xcopy /E /I dsh-corner-gauge "%USERPROFILE%\.dsh\profiles\desktop\node_modules\d
 
 ```js
 window.__DSH_BADGE_CONFIG__ = {
-  skin: 'bmw-m',
+  skin: 'mclaren',
   elements: ['currency', 'amount', 'progress'],
   position: { right: 22, bottom: 96 },
   size: { width: 322, height: 70 },
@@ -95,7 +95,7 @@ window.__DSH_BADGE_CONFIG__ = {
 
 | 键 | 类型 | 默认 | 说明 |
 |---|---|---|---|
-| `skin` | `string` | `'bmw-m'` | 边框模板名 |
+| `skin` | `string` | `'mclaren'` | 边框模板名 |
 | `elements` | `string[]` | `['currency','amount','progress']` | 面板元素顺序 |
 | `position` | `{right,bottom}` | `{22,96}` | 默认停靠位置 |
 | `size` | `{width,height}` | `{322,70}` | 面板尺寸（px） |
@@ -116,7 +116,15 @@ window.__DSH_BADGE_CONFIG__ = {
 ```json
 {
   "cars": [
-    { "id": "m4-silver", "name": "M4 Competition · 银", "kind": "cutout", "file": "cars/m4-silver.webp", "sound": "engine-m4" }
+    { "id": "m4-silver", "name": "M4 Competition · 银", "kind": "cutout", "file": "cars/m4-silver.webp", "sound": "engine-m4" },
+    {
+      "id": "mclaren-f1", "name": "McLaren F1 · 迈凯伦", "kind": "alpha",
+      "file": "cars/mclaren-f1.webp", "sound": "engine-m4",
+      "wheels": [
+        { "file": "cars/mclaren-wheel-front.webp", "x": 22.29, "y": 71.47, "d": 12.24 },
+        { "file": "cars/mclaren-wheel-rear.webp",  "x": 86.29, "y": 72.39, "d": 12.24 }
+      ]
+    }
   ],
   "sounds": [
     { "id": "engine-m4", "name": "M4 直六 · 近距实录", "file": "sounds/engine-m4.mp3" }
@@ -130,6 +138,17 @@ window.__DSH_BADGE_CONFIG__ = {
 |---|---|---|
 | `cutout` | 透明底（或黑底可被过滤）的抠图 | `mix-blend-mode: screen`，黑底自动消失 |
 | `plate` | 带柔化透明边的场景照片 | 正常混合，边缘自己淡出 |
+| `alpha` | 带真实透明通道的抠图（如白底抠干净的车） | 正常混合 |
+
+### 车轮滚动
+
+车辆条目里可以带 `wheels`：跑动时按车身百分比定位圆形车轮图层，绕自身圆心旋转。
+
+| 字段 | 说明 |
+|---|---|
+| `x` / `y` | 车轮中心相对车身的百分比坐标 |
+| `d` | 车轮直径，相对车身**宽度**的百分比 |
+| `speed` | 转一圈的秒数（默认 0.16，越小越快） |
 
 **加一辆车**：把图片丢进 `assets/cars/`，在清单里加一条，`npm run build` 即可 —— 不用改 JS。
 **换声浪**：把 mp3 丢进 `assets/sounds/`，清单 `sounds` 加一条，车辆的 `sound` 指向它即可。
@@ -200,7 +219,7 @@ BADGE.skins['my-skin'] = {
 
 | 内置模板 | 说明 |
 |---|---|
-| `bmw-m` | 斜切底板 + M 标志 + 顶部红条 + 斜向速度线 |
+| `mclaren` | 斜切底板 + 迈凯伦 speedmark + 顶部红条 + 斜向速度线 |
 | `minimal` | 极简圆角底板，无装饰 |
 
 ---
@@ -287,7 +306,7 @@ assets/
   manifest.json    素材库清单（车辆）
   cars/            车辆图片（cutout 或 plate）
   sounds/          声浪录音（构建时内嵌，可留空走合成）
-  bmw-m.svg        标志（构建时 base64 内嵌）
+  mclaren-mark.webp  迈凯伦标志（构建时 base64 内嵌）
   rajdhani-700.woff2  字体（构建时 base64 内嵌）
 scripts/           build / verify / lint
 lib/               构建产物：index.js（宿主半边）+ client.js（浏览器半边）

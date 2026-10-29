@@ -9,6 +9,22 @@ BADGE.inject = ['remote', 'remote.account'];
 /* 供预览页/调试调用：跑一次跑车 */
 window.__runDrive = () => BADGE.runDrive();
 
+/* 截图/调试用：把跑车定格在动画的指定毫秒处（不触发计时器） */
+window.__freezeDrive = (offsetMs) => {
+  const root = document.getElementById(BADGE.ROOT_ID);
+  if (!root) return null;
+  const car = BADGE.pickCar();
+  const wrap = root.querySelector('.g-car-wrap');
+  if (wrap && car && BADGE.buildCarLayers) BADGE.buildCarLayers(wrap, car);
+  root.style.setProperty('--drive-ms', '1500ms');
+  root.classList.add('g-driving');
+  if (wrap) {
+    wrap.style.animationPlayState = 'paused';
+    wrap.style.animationDelay = `-${offsetMs}ms`;
+  }
+  return car && car.id;
+};
+
 /** 等 <body> 就绪再挂载（客户端插件可能在解析 head 时就被激活）。 */
 BADGE.whenBody = function whenBody(fn) {
   if (typeof document === 'undefined') return;

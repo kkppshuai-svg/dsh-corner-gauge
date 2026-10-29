@@ -11,10 +11,10 @@
 BADGE.skins = {};
 
 /**
- * bmw-m：斜切刀锋 + 官方 M 标志 + 顶部红条 + 斜向速度线。
+ * mclaren：斜切底板 + 迈凯伦 speedmark + 顶部红条 + 斜向速度线。
  * 当前默认模板。
  */
-BADGE.skins['bmw-m'] = {
+BADGE.skins.mclaren = {
   css(id) {
     return `
 #${id} .g-blade {
@@ -63,7 +63,7 @@ BADGE.skins['bmw-m'] = {
     const logo = document.createElement('img');
     logo.className = 'g-logo';
     logo.alt = '';
-    logo.src = 'data:image/svg+xml;base64,__LOGO_B64__';
+    logo.src = 'data:image/webp;base64,__LOGO_B64__';
     blade.appendChild(logo);
   },
 };
@@ -88,6 +88,9 @@ BADGE.skins.minimal = {
     /* 极简模板没有任何装饰节点 */
   },
 };
+
+/** 旧名字兼容：`bmw-m` 是同一套外壳，只是换了标志 */
+BADGE.skins['bmw-m'] = BADGE.skins.mclaren;
 
 /** 取当前配置对应的 skin，找不到就退回 minimal。 */
 BADGE.currentSkin = function currentSkin() {

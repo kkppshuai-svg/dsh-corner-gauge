@@ -104,15 +104,18 @@
   const freeze = Number(new URLSearchParams(location.search).get('freeze') || 0);
   if (freeze > 0) {
     setTimeout(() => {
-      const root = document.getElementById('dsh-corner-gauge');
-      const car = root && root.querySelector('.g-car');
-      if (!root || !car) return;
-      root.style.setProperty('--drive-ms', '1500ms');
-      root.classList.add('g-driving');
-      car.style.animationPlayState = 'paused';
-      car.style.animationDelay = `-${freeze}ms`;
+      /* 按配置选车 + 定格在指定毫秒（不触发计时器） */
+      if (window.__freezeDrive) window.__freezeDrive(freeze);
     }, 400);
   }
+</script>
+<script>
+  /* 便于截图测试：?car=<id> 固定车辆，?fx=1 打开速度线特效 */
+  const qs = new URLSearchParams(location.search);
+  const override = {};
+  if (qs.get('car')) override.car = qs.get('car');
+  if (qs.get('fx')) override.fx = qs.get('fx') === '1';
+  if (Object.keys(override).length) window.__DSH_BADGE_CONFIG__ = { drive: override };
 </script>
 <script src="lib/client.js"></script>
 </body>

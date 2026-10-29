@@ -5,6 +5,12 @@
 
 ## [Unreleased]
 
+### Added
+
+- 第二辆车：迈凯伦 F1（白底泛洪抠图 + 真实透明通道，`kind: "alpha"`）
+- **车轮滚动**：车辆可在清单里声明 `wheels`，跑动时按百分比定位圆形车轮图层并绕圆心旋转
+- 边框标志从 BMW M 换成迈凯伦 speedmark（webp 内嵌），皮肤改名 `mclaren`（`bmw-m` 保留为别名）
+
 ### Changed
 
 - 声浪改为 **录音优先、合成兜底**：内嵌参考录音，新增 `drive.engine`

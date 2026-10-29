@@ -82,7 +82,7 @@ try {
   if (committed.includes('data:font/woff2;base64,')) ok('字体已内嵌');
   else bad('缺少内嵌字体');
 
-  if (committed.includes('data:image/svg+xml;base64,')) ok('标志已内嵌');
+  if (/data:image\/(svg\+xml|webp|png);base64,/.test(committed)) ok('标志已内嵌');
   else bad('缺少内嵌标志');
 
   if (committed.includes('data:audio/mpeg;base64,')) ok('声浪录音已内嵌');

@@ -43,7 +43,7 @@ function dataUri(rel) {
 }
 
 const FONT_B64 = readFileSync(join(ASSETS, 'rajdhani-700.woff2')).toString('base64');
-const LOGO_B64 = readFileSync(join(ASSETS, 'bmw-m.svg')).toString('base64');
+const LOGO_B64 = readFileSync(join(ASSETS, 'mclaren-mark.webp')).toString('base64');
 
 /* ---------------- 素材库 ---------------- */
 const MANIFEST = JSON.parse(readFileSync(join(ASSETS, 'manifest.json'), 'utf8'));
@@ -58,10 +58,17 @@ const sounds = (MANIFEST.sounds || []).map((s) => ({
 const cars = (MANIFEST.cars || []).map((c) => ({
   id: c.id,
   name: c.name || c.id,
-  kind: c.kind === 'plate' ? 'plate' : 'cutout',
+  kind: ['plate', 'alpha'].includes(c.kind) ? c.kind : 'cutout',
   sound: c.sound || (sounds[0] && sounds[0].id) || null,
   engine: c.engine || null,
   src: dataUri(c.file),
+  wheels: (c.wheels || []).map((w) => ({
+    src: dataUri(w.file),
+    x: w.x,
+    y: w.y,
+    d: w.d,
+    speed: w.speed || 0.16,
+  })),
 }));
 
 if (cars.length === 0) throw new Error('assets/manifest.json 里一辆车都没有');

@@ -274,12 +274,8 @@ BADGE.runDrive = function runDrive() {
   if (!root || root.classList.contains('g-driving')) return null;
 
   const car = BADGE.pickCar();
-  const img = root.querySelector('.g-car');
-  if (img && car) {
-    if (img.getAttribute('src') !== car.src) img.src = car.src;
-    img.className = `g-car g-${car.kind}`;
-    img.dataset.car = car.id;
-  }
+  const wrap = root.querySelector('.g-car-wrap');
+  if (wrap && car) BADGE.buildCarLayers(wrap, car);
 
   const ms = BADGE.config.drive.durationMs || 1500;
   root.style.setProperty('--drive-ms', `${ms}ms`);
@@ -298,26 +294,46 @@ BADGE.runDrive = function runDrive() {
 /** 样式：跑车图层、速度线、声音按钮。 */
 BADGE.driveCss = function driveCss(id) {
   return `
-#${id} .g-car {
+/* 跑车容器：整辆车的位移由它承担，车轮在里面自转 */
+#${id} .g-car-wrap {
   position: absolute; bottom: 8px; left: 100%;
-  height: 50px; width: auto;
+  height: 50px; width: max-content;
   opacity: 0; pointer-events: none;
   will-change: transform, opacity;
 }
-/* 抠图素材：黑底会被 screen 混合吃掉，只剩车身 */
-#${id} .g-car.g-cutout {
+#${id} .g-car-wrap .g-car {
+  display: block; height: 100%; width: auto;
+}
+/* 黑底抠图：screen 混合让黑底消失 */
+#${id} .g-car-wrap .g-car.g-cutout {
   mix-blend-mode: screen;
   filter: drop-shadow(0 2px 6px rgba(0,0,0,.9));
 }
-/* 场景素材：自带柔化透明边，正常混合即可融进深色面板 */
-#${id} .g-car.g-plate {
-  height: 62px; bottom: 4px;
+/* 真实透明通道：正常混合 */
+#${id} .g-car-wrap .g-car.g-alpha {
+  mix-blend-mode: normal;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.85));
+}
+/* 场景素材：自带柔化透明边 */
+#${id} .g-car-wrap .g-car.g-plate {
   mix-blend-mode: normal;
   filter: drop-shadow(0 3px 10px rgba(0,0,0,.65));
 }
-#${id}.g-driving .g-car {
+#${id} .g-car-wrap.g-plate-wrap { height: 62px; bottom: 4px; }
+/* 车轮：绕自身圆心旋转，跑动时才转 */
+#${id} .g-wheel {
+  position: absolute; left: 0; top: 0;
+  transform: translate(-50%, -50%);
+  transform-origin: 50% 50%;
+  border-radius: 50%;
+  animation: g-wheel-spin linear infinite;
+  animation-play-state: paused;
+  pointer-events: none;
+}
+#${id}.g-driving .g-car-wrap {
   animation: g-car-run var(--drive-ms, 1500ms) cubic-bezier(.42,0,.58,1) forwards;
 }
+#${id}.g-driving .g-wheel { animation-play-state: running; }
 /* 跑动时只留跑车：隐藏面板内容、标志、进度线 */
 #${id}.g-driving .g-content { opacity: 0; }
 #${id}.g-driving .g-logo { opacity: 0; }
@@ -364,6 +380,10 @@ BADGE.driveCss = function driveCss(id) {
   92% { opacity: 1; }
   100% { left: -24%; opacity: 0; }
 }
+@keyframes g-wheel-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
 @keyframes g-speed {
   0% { background-position: 0 0; } 100% { background-position: -52px 0; }
 }
@@ -378,6 +398,38 @@ BADGE.driveCss = function driveCss(id) {
 }`;
 };
 
+/**
+ * 重建跑车图层：车身 + 可选车轮。
+ * 车轮按车身尺寸的百分比定位（x/y 为中心点，d 为直径，均相对车身宽/高）。
+ */
+BADGE.buildCarLayers = function buildCarLayers(wrap, car) {
+  wrap.innerHTML = '';
+  wrap.classList.toggle('g-plate-wrap', car.kind === 'plate');
+
+  const img = document.createElement('img');
+  img.className = `g-car g-${car.kind || 'cutout'}`;
+  img.alt = '';
+  img.draggable = false;
+  img.src = car.src;
+  img.dataset.car = car.id;
+  wrap.appendChild(img);
+
+  for (const w of car.wheels || []) {
+    const wheel = document.createElement('img');
+    wheel.className = 'g-wheel';
+    wheel.alt = '';
+    wheel.draggable = false;
+    wheel.src = w.src;
+    wheel.style.left = `${w.x}%`;
+    wheel.style.top = `${w.y}%`;
+    wheel.style.width = `${w.d}%`;
+    wheel.style.animationDuration = `${w.speed || 0.16}s`;
+    wrap.appendChild(wheel);
+  }
+
+  return img;
+};
+
 /** 挂载：跑车图层 + 声音按钮 + 点击检测（与拖动互斥）。 */
 BADGE.mountDrive = function mountDrive(parts) {
   const { root, blade } = parts;
@@ -386,14 +438,12 @@ BADGE.mountDrive = function mountDrive(parts) {
   /* 可选特效（速度线 + 拖尾）：默认关闭，只留跑车本体 */
   if (BADGE.config.drive.fx) root.classList.add('g-fx');
 
+  const wrap = document.createElement('div');
+  wrap.className = 'g-car-wrap';
+  blade.appendChild(wrap);
+  BADGE.carWrap = wrap;
   const first = (BADGE.CARS || [])[0];
-
-  const car = document.createElement('img');
-  car.className = `g-car g-${(first && first.kind) || 'cutout'}`;
-  car.alt = '';
-  car.draggable = false;
-  if (first && first.src) car.src = first.src;
-  blade.appendChild(car);
+  if (first) BADGE.buildCarLayers(wrap, first);
 
   const trail = document.createElement('div');
   trail.className = 'g-car-trail';

@@ -22,7 +22,7 @@ BADGE.POS_KEY = 'dsh-corner-gauge:pos';
  * @property pollMs    轮询间隔
  */
 BADGE.DEFAULTS = {
-  skin: 'bmw-m',
+  skin: 'mclaren',
   elements: ['currency', 'amount', 'progress'],
   position: { right: 22, bottom: 96 },
   size: { width: 322, height: 70 },
