@@ -49,10 +49,24 @@ const LOGO_B64 = readFileSync(join(ASSETS, 'mclaren-mark.webp')).toString('base6
 const MANIFEST = JSON.parse(readFileSync(join(ASSETS, 'manifest.json'), 'utf8'));
 
 /* 声浪：优先用清单里的录音（构建时内嵌），没有则回退到 WebAudio 合成 */
+/* 本地覆盖：assets/sounds-local/<id>.mp3 存在时优先使用，不进仓库（.gitignore） */
+const LOCAL_DIR = join(ASSETS, 'sounds-local');
+const localSound = (id) => {
+  for (const ext of ['.mp3', '.ogg', '.wav', '.m4a']) {
+    const p = join(LOCAL_DIR, `${id}${ext}`);
+    if (existsSync(p)) {
+      const mime = MIME[ext.toLowerCase()] || 'audio/mpeg';
+      console.log(`  · 使用本地覆盖声浪：sounds-local/${id}${ext}`);
+      return `data:${mime};base64,${readFileSync(p).toString('base64')}`;
+    }
+  }
+  return null;
+};
+
 const sounds = (MANIFEST.sounds || []).map((s) => ({
   id: s.id,
   name: s.name || s.id,
-  src: s.file ? dataUri(s.file) : null,
+  src: localSound(s.id) || (s.file ? dataUri(s.file) : null),
 }));
 
 /* 品牌标志：车身配色与 logo 随车辆切换 */

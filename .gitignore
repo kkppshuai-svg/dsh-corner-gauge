@@ -27,3 +27,6 @@ _brands*.png
 # 抠图中间产物
 *-tmp.png
 assets/incoming/
+
+# 本地覆盖声浪（版权素材不进仓库）
+assets/sounds-local/

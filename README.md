@@ -206,6 +206,22 @@ node scripts/import-car.mjs \
 { "id": "redbull-rb20", "sound": "bgm-verstappen", "durationMs": 2600 }
 ```
 
+#### 用你自己的 BGM（本地覆盖，不进仓库）
+
+仓库自带的 `bgm-verstappen.mp3` 是项目用合成器做的"人浪"（`_tools/chant.mjs`）——
+商业音轨（例如 Pitstop Boys 的《Super Max》）有版权，不能放进公开仓库。
+
+想换成你本机上的版本，一条命令：
+
+```bash
+node _tools/set-bgm.mjs "C:\path\to\track.mp3" --start 12.5 --dur 2.6
+npm run build
+```
+
+脚本会截取、归一化并写入 `assets/sounds-local/bgm-verstappen.mp3`；
+构建时这个目录**优先于**仓库素材，而它已在 `.gitignore` 里，所以不会推到 GitHub。
+删掉该文件再构建即恢复默认合成版。
+
 ### 车轮滚动
 
 车辆条目里可以带 `wheels`：跑动时按车身百分比定位圆形车轮图层，绕自身圆心旋转。
