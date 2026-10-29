@@ -16,3 +16,8 @@ _f*.png
 # 本地调试截图
 _edge*.png
 _z*.png
+
+# 素材导入临时目录
+.import-tmp/
+assets/incoming/*.png
+assets/incoming/*.jpg

@@ -1,7 +1,16 @@
 {
   "brands": {
-    "bmw-m": { "src": "bmw-m.svg", "accent": "#b00500", "accent2": "#c41200" },
-    "mclaren": { "src": "mclaren-mark.webp", "metal": true, "accent": "#ff8000", "accent2": "#ff9d2e" }
+    "bmw-m": {
+      "src": "bmw-m.svg",
+      "accent": "#b00500",
+      "accent2": "#c41200"
+    },
+    "mclaren": {
+      "src": "mclaren-mark.webp",
+      "metal": true,
+      "accent": "#ff8000",
+      "accent2": "#ff9d2e"
+    }
   },
   "cars": [
     {
@@ -10,11 +19,26 @@
       "kind": "alpha",
       "file": "cars/mclaren-f1.webp",
       "sound": "engine-f1",
-      "engine": { "revScale": 1.18, "roar": 1.2 },
+      "engine": {
+        "revScale": 1.18,
+        "roar": 1.2
+      },
       "brand": "mclaren",
       "wheels": [
-        { "file": "cars/mclaren-wheel-front.webp", "x": 22.29, "y": 71.47, "d": 12.24, "speed": 0.15 },
-        { "file": "cars/mclaren-wheel-rear.webp", "x": 86.29, "y": 72.39, "d": 12.24, "speed": 0.15 }
+        {
+          "file": "cars/mclaren-wheel-front.webp",
+          "x": 22.29,
+          "y": 71.47,
+          "d": 12.24,
+          "speed": 0.15
+        },
+        {
+          "file": "cars/mclaren-wheel-rear.webp",
+          "x": 86.29,
+          "y": 72.39,
+          "d": 12.24,
+          "speed": 0.15
+        }
       ]
     },
     {
@@ -23,16 +47,39 @@
       "kind": "alpha",
       "file": "cars/bmw-m4-gt3.webp",
       "sound": "engine-m4",
-      "engine": { "revScale": 1.06, "roar": 1.12 },
+      "engine": {
+        "revScale": 1.06,
+        "roar": 1.12
+      },
       "brand": "bmw-m",
       "wheels": [
-        { "file": "cars/bmw-wheel-front.webp", "x": 16.76, "y": 73.68, "d": 16.0, "speed": 0.16 },
-        { "file": "cars/bmw-wheel-rear.webp", "x": 78.48, "y": 72.37, "d": 16.0, "speed": 0.16 }
+        {
+          "file": "cars/bmw-wheel-front.webp",
+          "x": 16.76,
+          "y": 73.68,
+          "d": 16,
+          "speed": 0.16
+        },
+        {
+          "file": "cars/bmw-wheel-rear.webp",
+          "x": 78.48,
+          "y": 72.37,
+          "d": 16,
+          "speed": 0.16
+        }
       ]
     }
   ],
   "sounds": [
-    { "id": "engine-m4", "name": "M4 直六 · 近距实录", "file": "sounds/engine-m4.mp3" },
-    { "id": "engine-f1", "name": "F1 V8 · 赛道实录", "file": "sounds/engine-f1.mp3" }
+    {
+      "id": "engine-m4",
+      "name": "M4 直六 · 近距实录",
+      "file": "sounds/engine-m4.mp3"
+    },
+    {
+      "id": "engine-f1",
+      "name": "F1 V8 · 赛道实录",
+      "file": "sounds/engine-f1.mp3"
+    }
   ]
 }
