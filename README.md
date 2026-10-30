@@ -267,6 +267,30 @@ period 可选 	oday / week / month / ll。
 
 也可以右键面板……不，是**悬停面板右上角的 ⚙**：菜单下半部分直接切换数据源，选择会记在 localStorage['dsh-corner-gauge:provider']。
 
+### 豆包怎么接
+
+豆包客户端不落本地用量日志（%APPDATA%\Doubao 里只有一个 public_config.json），所以按三级回退：
+
+| 优先级 | 方式 | 说明 |
+|---|---|---|
+| ① | VOLC_ACCESSKEY + VOLC_SECRETKEY | 调火山引擎费用中心 QueryBalanceAcct，拿账户可用余额（¥）。程序内置 HMAC-SHA256 签名，无需额外依赖 |
+| ② | DOUBAO_USAGE_URL | 指向任意返回 {"value":12.3,"unit":"CNY"} 或 {"value":1234567,"unit":"tokens"} 的 HTTP 接口 |
+| ③ | ~/.doubao/usage.json | 同上格式的本地文件，自己用脚本产出 |
+
+```bash
+# 例：用火山引擎 AK/SK（在个人中心 → 密钥管理 创建，需要费用中心读权限）
+="AKLT..."
+="..."
+npm run bridge
+```
+
+```json
+// ~/.doubao/usage.json
+{ "value": 42.75, "unit": "CNY", "label": "豆包余额" }
+```
+
+面板会按 unit 自动切换显示方式：CNY 显示成 ¥42.75，	okens 显示成 42.8M。
+
 ### 采集口径
 
 - **Codex**：按行流式扫描会话 JSONL（单文件可能上百 MB），只累加时间戳在区间内的 payload.usage；input_tokens + output_tokens 作为总数，明细里还保留 cached / reasoning / turns。

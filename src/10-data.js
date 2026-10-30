@@ -91,8 +91,9 @@ BADGE.fetchBalance = async function fetchBalance(ctx) {
 
   /* ---------- 非 DSH：本地用量桥接 ---------- */
   if (provider !== 'dsh') {
-    view.compact = true;
+    /* 桥接返回 CNY 时按金额显示，其余按用量紧凑显示 */
     view.currency = '';
+    view.compact = false;
     try {
       const port = BADGE.config.bridgePort || 7317;
       const period = BADGE.config.period || 'today';
@@ -111,6 +112,9 @@ BADGE.fetchBalance = async function fetchBalance(ctx) {
 
       view.total = Number(data.value) || 0;
       view.unit = data.unit || 'tokens';
+      const isMoney = view.unit === 'CNY' || view.unit === 'USD';
+      view.compact = !isMoney;
+      view.currency = isMoney ? view.unit : '';
       view.provider = provider;
       view.period = period;
       view.scaleMax = BADGE.pickScale(view.total);
