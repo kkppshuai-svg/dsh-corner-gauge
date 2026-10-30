@@ -107,7 +107,8 @@ BADGE.build = function build() {
   BADGE.restorePos(root);
   BADGE.attachDrag(root);
 
-  if (BADGE.setBrand && BADGE.CARS && BADGE.CARS[0]) BADGE.setBrand(BADGE.CARS[0].brand);
+  if (BADGE.setCar && BADGE.selectedCar) BADGE.setCar(BADGE.selectedCar());
+  else if (BADGE.setBrand && BADGE.CARS && BADGE.CARS[0]) BADGE.setBrand(BADGE.CARS[0].brand);
 
   requestAnimationFrame(() => root.classList.add('g-on'));
 };

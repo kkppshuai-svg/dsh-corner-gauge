@@ -7,7 +7,7 @@
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
-const BUNDLE = 'C:/Users/22491/Desktop/建模/dsh-corner-gauge/lib/client.js';
+const BUNDLE = new URL('../lib/client.js', import.meta.url);
 const src = readFileSync(BUNDLE, 'utf8');
 
 /* ---------- 桩 AudioContext ---------- */
@@ -78,7 +78,8 @@ const document = {
 const sandbox = {
   window: {}, document,
   navigator: { language: 'zh-CN' },
-  localStorage: { _m: {}, getItem(k) { return this._m[k] ?? null; }, setItem(k, v) { this._m[k] = v; } },
+  addEventListener() {}, innerWidth: 1200, innerHeight: 800,
+  localStorage: { _m: { 'dsh-corner-gauge:car': 'ferrari-sf24' }, getItem(k) { return this._m[k] ?? null; }, setItem(k, v) { this._m[k] = v; } },
   AudioContext: FakeAudioContext,
   setInterval: () => 1, clearInterval() {}, setTimeout: (f) => { f(); return 1; }, clearTimeout() {},
   requestAnimationFrame: (f) => f(),
@@ -111,6 +112,12 @@ try {
   const mounted = registry.get('dsh-corner-gauge');
   if (!mounted) throw new Error('面板没有挂到 body 上');
   ok('面板已挂载');
+
+  const allNodes = (node) => [node, ...node.children.flatMap(allNodes)];
+  const cars = allNodes(mounted).filter((node) => node.dataset && node.dataset.car && node.tagName === 'img');
+  if (cars.at(-1)?.dataset.car === 'ferrari-sf24' && mounted.dataset.brand === 'ferrari') ok('恢复已保存的车辆与对应品牌');
+  else bad(`未恢复车辆或品牌：${cars.at(-1)?.dataset.car}, ${mounted.dataset.brand}`);
+
 
   /* 模拟一次点击（down → up，位移 0） */
   mounted.fire('pointerdown', { button: 0, clientX: 100, clientY: 100, pointerId: 1, preventDefault() {} });

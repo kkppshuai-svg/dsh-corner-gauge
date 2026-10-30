@@ -32,7 +32,7 @@ kernel.CreateMutexW.argtypes=[ctypes.c_void_p,ctypes.c_bool,ctypes.c_wchar_p]
 kernel.CreateMutexW.restype=ctypes.c_void_p
 mutex=kernel.CreateMutexW(None,False,'Local\\CodexOriginalUsageGauge')
 if not mutex or kernel.GetLastError()==183: raise SystemExit('Gauge is already running')
-server=ThreadingHTTPServer(('127.0.0.1',0),Handler)
+server=ThreadingHTTPServer(('127.0.0.1',37651),Handler)
 threading.Thread(target=server.serve_forever,daemon=True).start()
 def warm_cache():
     try:
@@ -44,7 +44,7 @@ def warm_cache():
 warm=threading.Thread(target=warm_cache,daemon=True)
 warm.start()
 warm.join(timeout=8)
-screen=ctypes.windll.user32; width=570; height=260
+screen=ctypes.windll.user32; width=500; height=245
 screen.FindWindowW.argtypes=[ctypes.c_wchar_p,ctypes.c_wchar_p]
 screen.FindWindowW.restype=ctypes.c_void_p
 screen.SetWindowPos.argtypes=[ctypes.c_void_p,ctypes.c_void_p,ctypes.c_int,ctypes.c_int,ctypes.c_int,ctypes.c_int,ctypes.c_uint]

@@ -584,7 +584,7 @@ BADGE.mountDrive = function mountDrive(parts) {
 
   BADGE.syncGearUI = function syncGearUI(id) {
     const current = id || BADGE.selectedCar();
-    menu.querySelectorAll('.g-menu-item').forEach((el) => {
+    menu.querySelectorAll('.g-menu-item[data-car]').forEach((el) => {
       el.classList.toggle('g-active', el.dataset.car === current);
     });
   };
