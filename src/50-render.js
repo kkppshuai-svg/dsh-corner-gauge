@@ -141,8 +141,14 @@ BADGE.scheduleRetry = function scheduleRetry(ctx) {
   }, delay);
 };
 
+/** 手动切换数据源后立即刷新（复用当前 ctx，不排队重试）。 */
+BADGE.refreshSoft = function refreshSoft() {
+  if (BADGE.lastCtx) BADGE.refresh(BADGE.lastCtx);
+};
+
 /** 刷新一次：取数 → 绘制 → 失败则排队重试。 */
 BADGE.refresh = async function refresh(ctx) {
+  BADGE.lastCtx = ctx;
   const view = BADGE.view;
   const state = await BADGE.fetchBalance(ctx);
 

@@ -232,6 +232,50 @@ node scripts/build.mjs --local --out "<插件安装目录>/lib/client.js"
                               # 带本地 BGM，只写进安装目录，不进仓库
 ```
 
+## 数据源适配（DSH / Codex / Claude Code / 豆包）
+
+面板不再只认 DSH 账户余额。配置里的 provider 决定它显示谁的数据：
+
+| provider | 数据来源 | 显示 |
+|---|---|---|
+| dsh（默认） | ctx.remote.account.getBalance | ¥ 余额 |
+| codex | ~/.codex/sessions/**/*.jsonl 里的 	oken_usage_record | Token 用量（紧凑写法，如 112.8M）|
+| claude | ~/.claude/projects/**/*.jsonl 里 assistant 消息的 usage | Token 用量 |
+| doubao | ~/.doubao/usage.json（自己写，或用火山引擎 API 产出）| Token 用量 |
+
+面板装在浏览器环境里读不到本机文件，所以由**本地桥接**收集：
+
+```bash
+npm run bridge                 # 启动后监听 http://127.0.0.1:7317
+npm run bridge:once -- --provider codex --period week   # 只打印一次结果，不常驻
+```
+
+面板每 pollMs 拉一次 /usage?provider=codex&period=today。桥接没启动时面板显示 --，不会报错。
+
+period 可选 	oday / week / month / ll。
+
+配置示例：
+
+```json
+{
+  "provider": "codex",
+  "period": "week",
+  "bridgePort": 7317,
+  "pollMs": 120000
+}
+```
+
+也可以右键面板……不，是**悬停面板右上角的 ⚙**：菜单下半部分直接切换数据源，选择会记在 localStorage['dsh-corner-gauge:provider']。
+
+### 采集口径
+
+- **Codex**：按行流式扫描会话 JSONL（单文件可能上百 MB），只累加时间戳在区间内的 payload.usage；input_tokens + output_tokens 作为总数，明细里还保留 cached / reasoning / turns。
+- **Claude Code**：只统计 message.usage 存在的 assistant 条目，同样是 input + output；cache 读写单独记录。
+- **豆包**：目前没有公开的本地会话日志格式，走 ~/.doubao/usage.json 这个约定文件；要接火山引擎 OpenAPI（AK/SK 签名）可以在此基础上扩。
+
+> 桥接只监听 127.0.0.1，不出网；erify 脚本也只放行 localhost 地址，其他外部 URL 依然会判失败。
+
+
 ### 车轮滚动
 
 车辆条目里可以带 `wheels`：跑动时按车身百分比定位圆形车轮图层，绕自身圆心旋转。

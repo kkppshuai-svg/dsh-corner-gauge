@@ -28,6 +28,19 @@ BADGE.DEFAULTS = {
   size: { width: 322, height: 70 },
   currency: 'auto',
   pollMs: 60000,
+
+  /**
+   * 数据源：面板显示谁家的用量
+   *   'dsh'     DSH 账户余额（默认，走 ctx.remote.account）
+   *   'codex'   Codex 本地会话日志（需要先启动用量桥接 npm run bridge）
+   *   'claude'  Claude Code 本地会话日志
+   *   'doubao'  豆包（写 ~/.doubao/usage.json 或接火山引擎 API）
+   */
+  provider: 'dsh',
+  /** 统计区间：today / week / month / all */
+  period: 'today',
+  /** 用量桥接端口（bridge/server.mjs 监听的本地端口） */
+  bridgePort: 7317,
   /** 彩蛋：点击面板让 M 跑车开过一次（声浪可用右上角喇叭开关） */
   drive: {
     enabled: true,

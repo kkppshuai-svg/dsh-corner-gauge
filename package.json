@@ -36,7 +36,9 @@
     "smoke": "node scripts/smoke-engine.mjs",
     "test": "npm run lint && npm run verify && npm run digits && npm run smoke",
     "import": "node scripts/import-car.mjs",
-    "digits": "node scripts/check-digits.mjs"
+    "digits": "node scripts/check-digits.mjs",
+    "bridge": "node bridge/server.mjs",
+    "bridge:once": "node bridge/server.mjs --once"
   },
   "engines": {
     "node": ">=18"

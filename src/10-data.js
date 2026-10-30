@@ -31,6 +31,33 @@ BADGE.formatAmount = function formatAmount(n) {
   });
 };
 
+/** 紧凑数字：1234 → 1.2K，12600000 → 12.6M（用于 token 用量）。 */
+BADGE.formatCompact = function formatCompact(n) {
+  const v = Number(n) || 0;
+  const abs = Math.abs(v);
+  if (abs < 1000) return String(Math.round(v));
+  if (abs < 1e6) return `${(v / 1e3).toFixed(abs < 1e4 ? 2 : 1)}K`;
+  if (abs < 1e9) return `${(v / 1e6).toFixed(abs < 1e7 ? 2 : 1)}M`;
+  return `${(v / 1e9).toFixed(2)}B`;
+};
+
+/**
+ * 从本地用量桥接取一个指标（Codex / Claude Code / 豆包）。
+ * 桥接没启动时返回 unavailable —— 面板照常显示，只是数字变成 --。
+ */
+BADGE.fetchBridgeUsage = async function fetchBridgeUsage(provider, period, port) {
+  const url = `http://127.0.0.1:${port}/usage?provider=${encodeURIComponent(provider)}&period=${encodeURIComponent(period)}`;
+  const controller = typeof AbortController === 'function' ? new AbortController() : null;
+  const timer = controller ? setTimeout(() => controller.abort(), 4000) : null;
+  try {
+    const res = await fetch(url, controller ? { signal: controller.signal } : undefined);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+};
+
 /**
  * 从 getBalance 的返回里取出「充值余额 + 同币种赠金」。
  * @param value getBalance 的 value 字段
@@ -54,15 +81,55 @@ BADGE.extractBalance = function extractBalance(value) {
 };
 
 /**
- * 取一次余额并更新 view。
+ * 取一次数据并更新 view。
+ * provider 为 dsh 时走 DSH 账户余额，其余走本地用量桥接。
  * @returns {'ready'|'guest'|'error'}
  */
 BADGE.fetchBalance = async function fetchBalance(ctx) {
   const view = BADGE.view;
+  const provider = BADGE.config.provider || 'dsh';
+
+  /* ---------- 非 DSH：本地用量桥接 ---------- */
+  if (provider !== 'dsh') {
+    view.compact = true;
+    view.currency = '';
+    try {
+      const port = BADGE.config.bridgePort || 7317;
+      const period = BADGE.config.period || 'today';
+      const data = await BADGE.fetchBridgeUsage(provider, period, port);
+
+      if (!data || data.ok !== true) {
+        view.total = 0;
+        BADGE.report('bridge-error', (data && data.error) || 'no-ok');
+        return 'error';
+      }
+      if (data.available === false) {
+        view.total = 0;
+        BADGE.report('unavailable', data.reason || provider);
+        return 'guest';
+      }
+
+      view.total = Number(data.value) || 0;
+      view.unit = data.unit || 'tokens';
+      view.provider = provider;
+      view.period = period;
+      view.scaleMax = BADGE.pickScale(view.total);
+      BADGE.report('ready', `${provider} ${view.total} ${view.unit}`);
+      return view.total > 0 ? 'ready' : 'guest';
+    } catch (error) {
+      view.total = 0;
+      BADGE.report('bridge-down', `${provider}: ${error && error.message ? error.message : error}`);
+      return 'error';
+    }
+  }
+
+  /* ---------- DSH 账户余额 ---------- */
+  view.compact = false;
+  view.unit = '';
   try {
-    const account = ctx.remote && ctx.remote.account;
+    const account = ctx && ctx.remote && ctx.remote.account;
     if (!account || typeof account.getBalance !== 'function') {
-      BADGE.report('no-account', ctx.remote ? Object.keys(ctx.remote).join(',') : 'remote=undefined');
+      BADGE.report('no-account', ctx && ctx.remote ? Object.keys(ctx.remote).join(',') : 'remote=undefined');
       return 'error';
     }
 

@@ -115,6 +115,13 @@
     }, 600);
   }
 
+  if (new URLSearchParams(location.search).get('menu')) {
+    setTimeout(() => {
+      const m = document.querySelector('.g-menu');
+      if (m) m.classList.add('g-menu-open');
+    }, 800);
+  }
+
   if (freeze > 0) {
     setTimeout(() => {
       /* 按配置选车 + 定格在指定毫秒（不触发计时器） */
@@ -129,7 +136,14 @@
   if (qs.get('car')) override.car = qs.get('car');
   if (qs.get('drive')) override.__run = true;
   if (qs.get('fx')) override.fx = qs.get('fx') === '1';
-  if (Object.keys(override).length) window.__DSH_BADGE_CONFIG__ = { drive: override };
+  if (qs.get('provider')) window.__DSH_BADGE_CONFIG__ = Object.assign(window.__DSH_BADGE_CONFIG__ || {}, {
+    provider: qs.get('provider'),
+    period: qs.get('period') || 'today',
+    bridgePort: Number(qs.get('port') || 7317),
+  });
+  if (Object.keys(override).length) {
+    window.__DSH_BADGE_CONFIG__ = Object.assign(window.__DSH_BADGE_CONFIG__ || {}, { drive: override });
+  }
 </script>
 <script src="lib/client.js"></script>
 </body>

@@ -420,6 +420,7 @@ BADGE.driveCss = function driveCss(id) {
 }
 #${id} .g-menu-item:hover { background: #1d222b; color: #e6ecf3; }
 #${id} .g-menu-item.g-active { color: var(--g-accent-2, #ff9d2e); }
+#${id} .g-menu-sep { height: 1px; margin: 3px 2px; background: #262b34; }
 
 #${id} .g-sound.g-muted::after {
   content: ""; position: absolute; width: 15px; height: 1px;
@@ -534,6 +535,52 @@ BADGE.mountDrive = function mountDrive(parts) {
     menu.appendChild(item);
   }
   root.appendChild(menu);
+
+  /* ---- 数据源切换 ---- */
+  const sep = document.createElement('div');
+  sep.className = 'g-menu-sep';
+  menu.appendChild(sep);
+
+  const PROVIDERS = [
+    { id: 'dsh', label: 'DSH 余额' },
+    { id: 'codex', label: 'Codex 用量' },
+    { id: 'claude', label: 'Claude Code 用量' },
+    { id: 'doubao', label: '豆包用量' },
+  ];
+  for (const p of PROVIDERS) {
+    const item = document.createElement('div');
+    item.className = 'g-menu-item';
+    item.dataset.provider = p.id;
+    item.textContent = p.label;
+    item.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+      BADGE.__soundClick = true;
+      BADGE.setProvider(p.id);
+      menu.classList.remove('g-menu-open');
+    });
+    menu.appendChild(item);
+  }
+
+  BADGE.setProvider = function setProvider(id) {
+    BADGE.config.provider = id;
+    try { localStorage.setItem('dsh-corner-gauge:provider', id); } catch { /* 忽略 */ }
+    BADGE.syncProviderUI(id);
+    if (BADGE.refreshSoft) BADGE.refreshSoft();
+  };
+
+  BADGE.syncProviderUI = function syncProviderUI(id) {
+    const current = id || BADGE.config.provider || 'dsh';
+    menu.querySelectorAll('[data-provider]').forEach((el2) => {
+      el2.classList.toggle('g-active', el2.dataset.provider === current);
+    });
+  };
+
+  /* 记住上次选的数据源 */
+  try {
+    const savedProvider = localStorage.getItem('dsh-corner-gauge:provider');
+    if (savedProvider) BADGE.config.provider = savedProvider;
+  } catch { /* 忽略 */ }
+  BADGE.syncProviderUI();
 
   BADGE.syncGearUI = function syncGearUI(id) {
     const current = id || BADGE.selectedCar();

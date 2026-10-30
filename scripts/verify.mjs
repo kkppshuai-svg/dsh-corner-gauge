@@ -72,10 +72,14 @@ try {
     }
   }
 
-  /* 3. 零外部请求：产物里不该有 http(s) 的加载地址 */
+  /* 3. 零外部请求：产物里不该有 http(s) 的加载地址
+   *    例外：127.0.0.1 / localhost 的本地用量桥接（只连本机，不出网） */
   const remoteRefs = committed.match(/https?:\/\/[^\s'"`)]+/g) || [];
-  const loading = remoteRefs.filter((url) => !/w3\.org|inkscape|purl\.org|creativecommons/.test(url));
-  if (loading.length === 0) ok('产物无外部网络依赖');
+  const loading = remoteRefs.filter(
+    (url) => !/w3\.org|inkscape|purl\.org|creativecommons/.test(url)
+      && !/^https?:\/\/(127\.0\.0\.1|localhost)([:/]|$)/.test(url),
+  );
+  if (loading.length === 0) ok('产物无外部网络依赖（仅允许 localhost 用量桥接）');
   else bad(`产物含外部地址：${loading.slice(0, 3).join(', ')}`);
 
   /* 4. 关键资源已内嵌 */

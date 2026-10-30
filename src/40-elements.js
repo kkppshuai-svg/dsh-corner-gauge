@@ -50,7 +50,14 @@ BADGE.elements.currency = {
 
   update(el, view) {
     if (view.state === 'ready') {
-      el.textContent = BADGE.SYMBOLS[view.currency] || '¥';
+      /* 非余额数据源（token 用量）不显示货币符号 */
+    if (BADGE.view.compact) {
+      el.textContent = '';
+      el.style.display = 'none';
+      return;
+    }
+    el.style.display = '';
+    el.textContent = BADGE.SYMBOLS[view.currency] || '¥';
       el.style.display = '';
     } else {
       el.style.display = 'none';
@@ -154,7 +161,7 @@ BADGE.elements.amount = {
 
   update(ref, view) {
     const text =
-      view.state === 'ready' ? BADGE.formatAmount(view.total)
+      view.state === 'ready' ? (BADGE.view.compact ? BADGE.formatCompact(view.total) : BADGE.formatAmount(view.total))
         : view.state === 'loading' ? '···'
           : '--';
 

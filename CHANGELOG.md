@@ -7,6 +7,14 @@
 
 ### Added
 
+- **多数据源适配**：`provider` 可切 DSH 余额 / Codex / Claude Code / 豆包
+- 本地用量桥接 `bridge/server.mjs`（只监听回环地址），
+  采集 Codex 与 Claude Code 的会话 JSONL 统计 token 用量
+- 面板 ⚙ 菜单增加数据源切换，选择持久化
+- 非余额数据源改用紧凑数字格式（`112.8M`），并隐藏货币符号
+
+### Added
+
 - Red Bull 车辆改用维斯塔潘 BGM（荷兰国歌开头 2.5 秒，美国海军军乐团录音，公有领域）
 - 车辆支持 `durationMs` 覆盖跑动时长，音乐类声浪可以完整放完
 - **车辆 ↔ 品牌联动**：每辆车绑定 `brand`，跑车时标志与强调色跟着切换
