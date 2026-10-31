@@ -20,6 +20,11 @@
     "client": {
       "inject": [],
       "platform": "web"
+    },
+    "compat": {
+      "dsh": ">=0.2.1-rc.2 <0.3",
+      "node": ">=18",
+      "clientPlatform": "web"
     }
   },
   "files": [
@@ -27,7 +32,8 @@
     "lib/client.js",
     "cordis.patch.yml",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "NOTICE.md"
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
@@ -39,10 +45,12 @@
     "digits": "node scripts/check-digits.mjs",
     "bridge": "node bridge/server.mjs",
     "bridge:once": "node bridge/server.mjs --once",
-    "smoke:mount": "node scripts/smoke-mount.mjs"
+    "smoke:mount": "node scripts/smoke-mount.mjs",
+    "verify:install": "node scripts/verify-install.mjs"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=18",
+    "dsh": ">=0.2.1-rc.2 <0.3"
   },
   "repository": {
     "type": "git",
@@ -62,5 +70,8 @@
     "theme",
     "skin"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.5"
+  }
 }

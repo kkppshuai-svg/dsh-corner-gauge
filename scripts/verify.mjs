@@ -82,6 +82,17 @@ try {
   if (loading.length === 0) ok('产物无外部网络依赖（仅允许 localhost 用量桥接）');
   else bad(`产物含外部地址：${loading.slice(0, 3).join(', ')}`);
 
+  /* 3.5 许可标识一致性：package.json 的 license 与 LICENSE 文件头部 */
+  try {
+    const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+    const licenseText = readFileSync(new URL('../LICENSE', import.meta.url), 'utf8');
+    const isMitFile = licenseText.startsWith('MIT License') && licenseText.includes('Permission is hereby granted');
+    if (pkg.license === 'MIT' && isMitFile) ok('package.json license = MIT，LICENSE 为标准 MIT 全文');
+    else bad(`许可标识不一致：package.json license=${pkg.license} / LICENSE 标准 MIT=${isMitFile}`);
+  } catch (error) {
+    bad(`读取许可信息失败：${error.message}`);
+  }
+
   /* 4. 关键资源已内嵌 */
   if (committed.includes('data:font/woff2;base64,')) ok('字体已内嵌');
   else bad('缺少内嵌字体');

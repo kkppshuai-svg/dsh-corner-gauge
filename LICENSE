@@ -19,28 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-第三方资源 / Third-party assets
-
-- assets/bmw-m.svg — BMW M logo, sourced from Wikimedia Commons
-  (https://commons.wikimedia.org/wiki/File:BMW_M_logo.svg).
-  "BMW" and the BMW M logo are trademarks of Bayerische Motoren Werke AG.
-  Included here as a user-supplied theme asset for personal, non-commercial
-  use. This project is not affiliated with or endorsed by BMW.
-- assets/sounds/engine-f1.mp3 — excerpt from "McLaren-Mercedes MP4 23 (2008).ogg"
-  by Edvvc, via Wikimedia Commons, licensed CC BY-SA 3.0
-  (https://commons.wikimedia.org/wiki/File:McLaren-Mercedes_MP4_23_(2008).ogg).
-  Modified: trimmed, mono 32kHz, loudness-normalised.
-  This derivative is distributed under the same CC BY-SA 3.0 licence.
-- assets/sounds/bgm-verstappen.mp3 — original synthesis produced by this project's
-  script `_tools/chant.mjs` (crowd-style "du du du du" chant, no samples used).
-  Released under the same MIT licence as the rest of the project.
-- assets/mercedes-mark.webp, assets/ferrari-mark.webp, assets/redbull-mark.webp,
-  assets/sauber-mark.webp — team emblems provided by the repository owner for this
-  personal, non-commercial desktop widget. Backgrounds removed and re-encoded by
-  `_tools/logo-key.mjs`. All team names and marks are trademarks of their
-  respective owners; this project is not affiliated with or endorsed by them.
-- assets/rajdhani-700.woff2 — Rajdhani by Indian Type Foundry,
-  licensed under the SIL Open Font License 1.1.

@@ -7,6 +7,18 @@
 
 ### Fixed
 
+- DSH STORE 审查（issue #1633）：**许可证识别**与**兼容性声明**
+  - `LICENSE` 改为纯 MIT 全文，第三方素材声明移到 `NOTICE.md`
+    （此前追加在 LICENSE 里的素材说明导致 GitHub 判定为 NOASSERTION）
+  - `package.json` 显式声明 `engines.node` / `engines.dsh` / `dsh.compat` /
+    `peerDependencies`（cordis ^4.0.5）
+  - 新增 `scripts/verify-install.mjs`：npm pack → 空 profile 安装 →
+    校验元数据 → 加载挂载 → 卸载，一条命令产出可复现证据
+  - CI 增加 `distribution package` 任务；`verify` 增加许可标识一致性检查
+  - 证据文档 `docs/dsh-store-evidence.md`
+
+### Fixed
+
 - **数字时常变暗**：根因是「取数失败就把整块面板降到 45% 透明度」。
   现在失败时保留上一次的有效值（状态 stale），从来没取到过才显示 `--`，
   面板亮度不再随刷新结果变化

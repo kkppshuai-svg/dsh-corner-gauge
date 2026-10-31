@@ -232,6 +232,31 @@ node scripts/build.mjs --local --out "<插件安装目录>/lib/client.js"
                               # 带本地 BGM，只写进安装目录，不进仓库
 ```
 
+## 许可与 DSH 兼容性
+
+**许可**：代码为 [MIT](./LICENSE)。ssets/ 下的第三方素材授权单独列在
+[NOTICE.md](./NOTICE.md)（含 CC BY-SA 音频、所有者提供的录音与车队徽标声明）。
+
+**兼容性**（写在 package.json 里，供 DSH STORE 检查）：
+
+| 字段 | 值 |
+|---|---|
+| engines.node | >=18 |
+| engines.dsh | >=0.2.1-rc.2 <0.3 |
+| dsh.compat.clientPlatform | web |
+| dsh.client.inject | []（不注入可选 UI 包，只用 ctx.remote.account） |
+| peerDependencies | @deepseek-ai/cordis ^4.0.5 |
+
+**安装 / 启动 / 卸载验证**：
+
+`ash
+npm run verify:install
+`
+
+在临时目录里跑一遍 
+pm pack → 解包到空 profile → 校验元数据 → 加载并挂载 → 删除，
+输出可直接引用的证据。完整说明见 [docs/dsh-store-evidence.md](./docs/dsh-store-evidence.md)。
+
 ## 数据源适配（DSH / Codex / Claude Code / 豆包）
 
 面板不再只认 DSH 账户余额。配置里的 provider 决定它显示谁的数据：
