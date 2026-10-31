@@ -5,6 +5,20 @@
 
 ## [Unreleased]
 
+### Removed
+
+- 清理仓库（约 3 MB）
+  - 删除 11 张无人引用的调试截图，保留并接入 README 的 5 张
+  - 删除 `standalone/`：早前另一套基于 Python + Edge 的独立悬浮窗实现，
+    功能已被本轮 `bridge/` 多数据源桥接取代
+  - 删除 `_tools/detect-wheel.mjs`、`_tools/wheel-zoom.mjs`：
+    被 `wheel-grid.mjs` + `verify-wheels.mjs` 的标定流程取代
+
+### Changed
+
+- README 目录结构与维护脚本一览按现状重写；
+  许可章节指向 `NOTICE.md`，不再复述商标声明
+
 ### Fixed
 
 - DSH STORE 审查（issue #1633）：**许可证识别**与**兼容性声明**

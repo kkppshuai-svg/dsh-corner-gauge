@@ -18,12 +18,17 @@
 - [特性](#特性)
 - [安装](#安装)
 - [配置](#配置)
+- [素材库](#素材库)
+- [许可与 DSH 兼容性](#许可与-dsh-兼容性)
+- [数据源适配](#数据源适配dsh--codex--claude-code--豆包)
+- [彩蛋：跑车](#彩蛋跑车)
 - [自定义边框模板](#自定义边框模板)
 - [自定义面板元素](#自定义面板元素)
 - [数据快照](#数据快照)
 - [开发](#开发)
 - [已知限制](#已知限制)
 - [项目](#项目)
+- [许可](#许可)
 
 ---
 
@@ -183,6 +188,9 @@ node scripts/import-car.mjs \
 
 ### 车辆 ↔ 品牌
 
+![车队徽标](docs/team-brands.png)
+
+
 每辆车在清单里用 `brand` 指定品牌，跑车时面板的标志与强调色会跟着切换：
 
 ```json
@@ -258,6 +266,9 @@ pm pack → 解包到空 profile → 校验元数据 → 加载并挂载 → 删
 输出可直接引用的证据。完整说明见 [docs/dsh-store-evidence.md](./docs/dsh-store-evidence.md)。
 
 ## 数据源适配（DSH / Codex / Claude Code / 豆包）
+
+![四种数据源](docs/providers.png)
+
 
 面板不再只认 DSH 账户余额。配置里的 provider 决定它显示谁的数据：
 
@@ -372,6 +383,9 @@ pm run smoke:mount 用一套极简 DOM 桩把产物真正跑一遍：
 
 ## 彩蛋：跑车
 
+![六车总览](docs/f1-grid.png)
+
+
 **单击面板**（不拖动），一辆 M 跑车从右向左开过一次：
 
 - 车辆来自上面的素材库，默认按 `auto` 轮换
@@ -481,46 +495,72 @@ BADGE.elements.delta = {
 只需要 Node.js ≥ 18，**没有任何第三方依赖**。
 
 ```bash
-npm run build      # src/ + assets/ → lib/client.js（base64 内嵌）
-npm run lint       # 语法、命名约定、占位符残留、命名空间引用
-npm run verify     # 重新构建并与仓库产物逐字节比对
-npm test           # lint + verify
+npm run build           # src/ + assets/ → lib/client.js（base64 内嵌）
+npm run lint            # 语法、命名约定、占位符残留、命名空间引用
+npm run verify          # 重新构建并与仓库产物逐字节比对 + 许可标识一致
+npm run digits          # 数字渲染路径防回归（禁止 background-clip:text 等）
+npm run smoke           # 引擎合成冒烟
+npm run smoke:mount     # 挂载冒烟：apply → build → paint，断言金额渲染
+npm run verify:install  # 分发包安装/启动/卸载验证
+npm test                # lint + verify + digits + smoke + smoke:mount
 ```
 
 双击 `preview.html` 即可查看效果——它用假的 `ctx.remote` 喂数据，
-与装进 App 后运行的是同一份渲染代码。
+与装进 App 后运行的是同一份渲染代码。查询参数可切换场景：
+`?car=<id>` 指定车辆、`?provider=codex` 切数据源、`?freeze=<ms>` 定格动画、
+`?menu=1` 展开设置菜单、`?hostile=1` 给祖先加 filter 验证数字不褪色。
 
 ### 目录结构
 
 ```
-src/
-  00-config.js     配置、常量、view 快照
-  10-data.js       取数、格式化、诊断遥测
-  20-drag.js       拖动与位置记忆
-  30-skins.js      边框模板注册表（外壳）
-  40-elements.js   面板元素注册表（内容）
-  50-render.js     装配：样式汇总、建 DOM、绘制、重试
-  60-client.js     插件入口 apply()
+src/                 面板源码（按文件名顺序拼接）
+  00-config.js       配置、常量、view 快照
+  10-data.js         取数（DSH 账户 / 本地用量桥接）、格式化、诊断
+  20-drag.js         拖动与位置记忆
+  30-skins.js        边框模板注册表（外壳 + 品牌标志）
+  35-drive.js        跑车彩蛋：车辆图层、车轮、声浪
+  40-elements.js     面板元素注册表（货币、金额、进度条）
+  50-render.js       装配：样式汇总、建 DOM、绘制、重试
+  60-client.js       插件入口 apply()
 assets/
-  manifest.json    素材库清单（车辆）
-  cars/            车辆图片（cutout 或 plate）
-  sounds/          声浪录音（构建时内嵌，可留空走合成）
-  mclaren-mark.webp  迈凯伦标志（构建时 base64 内嵌）
-  rajdhani-700.woff2  字体（构建时 base64 内嵌）
-scripts/           build / verify / lint
-lib/               构建产物：index.js（宿主半边）+ client.js（浏览器半边）
+  manifest.json      素材库清单（车辆 / 品牌 / 声浪）
+  cars/              车辆图片与轮辋圆片
+  sounds/            声浪录音（构建时内嵌）
+  sounds-local/      本地覆盖声浪（.gitignore，不进仓库）
+  *-mark.webp|svg    品牌标志；rajdhani-700.woff2 字体
+bridge/              本机用量桥接（只监听 127.0.0.1）
+  server.mjs         HTTP 服务：/usage、/health
+  collectors/        codex / claude / doubao 三个数据源
+scripts/             构建、校验、冒烟、入库、部署
+_tools/              一次性素材加工脚本（抠图、切轮辋、BGM 截取）
+docs/                截图与 DSH STORE 证据
+lib/                 构建产物：index.js（宿主半边）+ client.js（浏览器半边）
 ```
 
 > `lib/client.js` 由构建生成，**不要手改**——CI 会校验产物与源码是否一致。
+
+### 维护脚本一览
+
+| 脚本 | 用途 |
+|---|---|
+| `scripts/deploy.ps1`、`部署.bat` | 构建并同步到 DSH profile（`-Restart` 顺便重启 App） |
+| `推送.bat` | 用 DSH 自带的 git 推送到 origin/main |
+| `scripts/import-car.mjs` | 新车辆入库：抠图 → 去白边 → 蚀边 → 生成 webp + 清单条目 |
+| `_tools/logo-key.mjs`、`logo-key2.mjs` | 品牌标志抠图（后者处理「框内有洞」的封闭区） |
+| `_tools/wheel-grid.mjs`、`cut-wheels.mjs`、`verify-wheels.mjs` | 车轮标定 → 切轮辋 → 离线验证位置 |
+| `_tools/set-bgm.mjs` | 把任意音频/视频截成 BGM（写入 sounds-local，不进仓库） |
+| `_tools/chant.mjs` | 生成默认人浪 BGM（合成，无版权素材） |
 
 ---
 
 ## 已知限制
 
 - 客户端插件在 DSH 启动时装配，改完必须重启，热更新不生效
-- 余额依赖 `ctx.remote.account.getBalance`，需要先在 DSH 里登录账户；
+- DSH 余额依赖 `ctx.remote.account.getBalance`，需要先在 DSH 里登录账户；
   纯 API Key 模式拿不到余额，面板会一直显示 `--`
+- 非 DSH 数据源需要先跑 `npm run bridge`，否则显示 `--`（不报错、不降亮度）
 - 配色与字号写在 `src/40-elements.js` 的 CSS 里，换主题请改源码后重新构建
+
 
 ---
 
@@ -531,9 +571,10 @@ lib/               构建产物：index.js（宿主半边）+ client.js（浏览
 | [CHANGELOG.md](CHANGELOG.md) | 版本变更记录 |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | 开发流程、提交规范、PR 要求 |
 | [SECURITY.md](SECURITY.md) | 安全边界与漏洞报告方式 |
+| [NOTICE.md](NOTICE.md) | 第三方素材的授权与归属 |
+| [docs/dsh-store-evidence.md](docs/dsh-store-evidence.md) | DSH STORE 审查证据 |
 
 ## 许可
 
-MIT。内置的 M 标志来自 [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:BMW_M_logo.svg)，
-相关商标归 BMW AG 所有，仅作为个人主题资源使用，本项目与 BMW 无关联。
-字体 [Rajdhani](https://fonts.google.com/specimen/Rajdhani) 采用 SIL OFL 1.1。
+代码为 [MIT](LICENSE)。`assets/` 下的第三方素材（车辆渲染图、车队徽标、音频、字体）
+授权与商标归属见 [NOTICE.md](NOTICE.md)，不影响代码授权。
