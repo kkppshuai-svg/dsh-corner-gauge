@@ -144,7 +144,9 @@ const files = readdirSync(SRC)
 if (files.length === 0) throw new Error('src/ 下没有找到模块');
 
 const body = files
-  .map((f) => `/* ---- ${f} ---- */\n${readFileSync(join(SRC, f), 'utf8')}`)
+  /* 统一行尾为 LF：源码可能被不同工具写成 CRLF，
+     产物行尾不一致会让 CI 的「产物 = 源码重建」校验失败 */
+  .map((f) => `/* ---- ${f} ---- */\n${readFileSync(join(SRC, f), 'utf8').replace(/\r\n/g, '\n')}`)
   .join('\n\n')
   .replaceAll('__FONT_B64__', FONT_B64)
   .replaceAll('__LOGO_B64__', LOGO_B64);
