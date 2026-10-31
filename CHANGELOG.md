@@ -5,6 +5,11 @@
 
 ## [Unreleased]
 
+### Changed
+
+- 面板 ⚙ 菜单只保留换车，移除了混进去的数据源切换项；
+  数据源回归配置字段 `provider`（可选 dsh / codex / claude / doubao）
+
 ### Added
 
 - **多数据源适配**：`provider` 可切 DSH 余额 / Codex / Claude Code / 豆包

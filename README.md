@@ -265,7 +265,7 @@ period 可选 	oday / week / month / ll。
 }
 ```
 
-也可以右键面板……不，是**悬停面板右上角的 ⚙**：菜单下半部分直接切换数据源，选择会记在 localStorage['dsh-corner-gauge:provider']。
+数据源只能在配置里选（`provider` 字段）。面板上的 ⚙ 菜单**只负责换车**，不再混入数据源选项。
 
 ### 豆包怎么接
 
