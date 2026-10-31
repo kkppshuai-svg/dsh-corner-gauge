@@ -5,6 +5,19 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- **数字时常变暗**：根因是「取数失败就把整块面板降到 45% 透明度」。
+  现在失败时保留上一次的有效值（状态 stale），从来没取到过才显示 `--`，
+  面板亮度不再随刷新结果变化
+- 清理死代码时漏删的 `txt.style.display` 引用会在运行时抛错、导致面板整个不渲染；
+  已修复，并新增 `scripts/smoke-mount.mjs` 挂载冒烟测试（纳入 npm test）防复发
+
+### Changed
+
+- 移除不再使用的 `.g-dim`、`.g-logo-text`、`BADGE.drive`、`BADGE.refreshSoft`
+- `_tools/` 去掉重复工具（measure-wheels、wheel-overlay）
+
 ### Changed
 
 - 面板 ⚙ 菜单只保留换车，移除了混进去的数据源切换项；

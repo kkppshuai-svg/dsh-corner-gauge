@@ -114,8 +114,7 @@ BADGE.elements.amount = {
   text-anchor: end;
 }
 #${id} .g-val-svg .g-num-shadow { fill: rgba(0,0,0,.8); }
-#${id} .g-val-svg .g-num-main { fill: url(#${AMOUNT_GRAD_ID}); }
-#${id}.g-dim .g-val { opacity: .45; }`;
+#${id} .g-val-svg .g-num-main { fill: url(#${AMOUNT_GRAD_ID}); }`;
   },
 
   mount(parts) {
@@ -160,10 +159,12 @@ BADGE.elements.amount = {
   },
 
   update(ref, view) {
-    const text =
-      view.state === 'ready' ? (BADGE.view.compact ? BADGE.formatCompact(view.total) : BADGE.formatAmount(view.total))
-        : view.state === 'loading' ? '···'
-          : '--';
+    /* 取数失败但有过有效值时是 stale：继续显示旧值，不变暗 */
+    const hasValue = view.state === 'ready' || view.state === 'stale';
+    const text = hasValue
+      ? (view.compact ? BADGE.formatCompact(view.total) : BADGE.formatAmount(view.total))
+      : view.state === 'loading' ? '···'
+        : '--';
 
     ref.ghost.textContent = text;
     ref.shadow.textContent = text;

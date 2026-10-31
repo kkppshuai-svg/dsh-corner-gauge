@@ -52,14 +52,6 @@ BADGE.skins.mclaren = {
   pointer-events: none;
 }
 /* 金属标：蒙版塑形 + 多段明暗渐变模拟镀铬（高光→本色→暗部→回光） */
-#${id} .g-logo-text {
-  display: none;
-  width: 100%; height: 100%;
-  align-items: center; justify-content: center;
-  font: 700 17px/1 Rajdhani, system-ui, sans-serif;
-  letter-spacing: .10em; padding-left: .10em;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,.85));
-}
 #${id} .g-logo.g-metal {
   -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
   -webkit-mask-position: center; mask-position: center;
@@ -99,10 +91,6 @@ BADGE.skins.mclaren = {
     const logoMetal = document.createElement('div');
     logoMetal.className = 'g-logo-metal';
     logo.appendChild(logoMetal);
-
-    const logoText = document.createElement('span');
-    logoText.className = 'g-logo-text';
-    logo.appendChild(logoText);
 
     blade.appendChild(logo);
   },
@@ -154,23 +142,13 @@ BADGE.setBrand = function setBrand(brand) {
   else root.style.removeProperty('--logo-h');
 
   const img = logo.querySelector('.g-logo-img');
-  const txt = logo.querySelector('.g-logo-text');
-  if (!img || !txt) return;
+  if (!img) return;
 
   logo.classList.remove('g-metal');
   logo.style.maskImage = '';
   logo.style.webkitMaskImage = '';
   logo.style.backgroundImage = '';
   img.style.display = 'none';
-  txt.style.display = 'none';
-
-  if (def.text) {
-    /* 文字标：车队缩写 */
-    txt.textContent = def.text;
-    txt.style.display = 'flex';
-    txt.style.color = def.accent2 || def.accent || '#fff';
-    return;
-  }
 
   if (def.metal) {
     /* 单色标：图形当蒙版，填充品牌的金属渐变（迈凯伦橙 / 奔驰银） */

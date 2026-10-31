@@ -14,7 +14,7 @@
  *   fx       是否叠加速度线/拖尾（默认关）
  *   car      指定车辆 id；默认 'auto' = 每次点击换下一辆
  */
-BADGE.drive = {};
+
 
 BADGE.SOUND_KEY = 'dsh-corner-gauge:sound';
 BADGE.CAR_KEY = 'dsh-corner-gauge:car';

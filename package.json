@@ -34,11 +34,12 @@
     "verify": "node scripts/verify.mjs",
     "lint": "node scripts/lint.mjs",
     "smoke": "node scripts/smoke-engine.mjs",
-    "test": "npm run lint && npm run verify && npm run digits && npm run smoke",
+    "test": "npm run lint && npm run verify && npm run digits && npm run smoke && npm run smoke:mount",
     "import": "node scripts/import-car.mjs",
     "digits": "node scripts/check-digits.mjs",
     "bridge": "node bridge/server.mjs",
-    "bridge:once": "node bridge/server.mjs --once"
+    "bridge:once": "node bridge/server.mjs --once",
+    "smoke:mount": "node scripts/smoke-mount.mjs"
   },
   "engines": {
     "node": ">=18"

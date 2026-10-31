@@ -122,8 +122,8 @@ BADGE.paint = function paint() {
   }
 
   const view = BADGE.view;
-  const ready = view.state === 'ready';
-  root.classList.toggle('g-dim', !ready);
+  /* 不再用整体降透明度表示「取数失败」——那看起来就是数字变暗。
+     失败时保留上一次的有效值，从来没有取到过才显示 --。 */
 
   for (const item of BADGE.mounted) {
     if (item.def.update) item.def.update(item.el, view, root);
@@ -142,18 +142,13 @@ BADGE.scheduleRetry = function scheduleRetry(ctx) {
   }, delay);
 };
 
-/** 手动切换数据源后立即刷新（复用当前 ctx，不排队重试）。 */
-BADGE.refreshSoft = function refreshSoft() {
-  if (BADGE.lastCtx) BADGE.refresh(BADGE.lastCtx);
-};
 
 /** 刷新一次：取数 → 绘制 → 失败则排队重试。 */
 BADGE.refresh = async function refresh(ctx) {
-  BADGE.lastCtx = ctx;
   const view = BADGE.view;
   const state = await BADGE.fetchBalance(ctx);
 
-  if (state === 'ready') {
+  if (state === 'ready' || state === 'stale') {
     view.state = 'ready';
     view.attempts = 0;
     if (view.retryTimer) {

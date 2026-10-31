@@ -31,6 +31,17 @@ BADGE.formatAmount = function formatAmount(n) {
   });
 };
 
+/**
+ * 取数失败时怎么处理：之前成功取到过值就保留旧值并返回 'stale'
+ * （面板照常显示、不变暗）；从来没成功过才重置为 0 并返回原状态。
+ */
+BADGE.keepOrReset = function keepOrReset(fallbackState) {
+  const view = BADGE.view;
+  if (view.hadValue) return 'stale';
+  view.total = 0;
+  return fallbackState;
+};
+
 /** 紧凑数字：1234 → 1.2K，12600000 → 12.6M（用于 token 用量）。 */
 BADGE.formatCompact = function formatCompact(n) {
   const v = Number(n) || 0;
@@ -100,17 +111,17 @@ BADGE.fetchBalance = async function fetchBalance(ctx) {
       const data = await BADGE.fetchBridgeUsage(provider, period, port);
 
       if (!data || data.ok !== true) {
-        view.total = 0;
         BADGE.report('bridge-error', (data && data.error) || 'no-ok');
-        return 'error';
+        return BADGE.keepOrReset('error');
       }
       if (data.available === false) {
-        view.total = 0;
         BADGE.report('unavailable', data.reason || provider);
-        return 'guest';
+        view.reason = data.reason || '';
+        return BADGE.keepOrReset('guest');
       }
 
       view.total = Number(data.value) || 0;
+      if (view.total > 0) view.hadValue = true;
       view.unit = data.unit || 'tokens';
       const isMoney = view.unit === 'CNY' || view.unit === 'USD';
       view.compact = !isMoney;
@@ -159,6 +170,7 @@ BADGE.fetchBalance = async function fetchBalance(ctx) {
     const forced = BADGE.config.currency;
     view.currency = forced !== 'auto' ? forced : parsed.currency;
     view.total = parsed.total;
+    view.hadValue = true;
     view.scaleMax = BADGE.pickScale(view.total);
     BADGE.report('ready', `${view.total} ${view.currency}`);
     return 'ready';
